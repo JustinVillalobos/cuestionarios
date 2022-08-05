@@ -1,0 +1,126 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?othf1z');
+  src:  url('fonts/icomoon.eot?othf1z#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?othf1z') format('truetype'),
+    url('fonts/icomoon.woff?othf1z') format('woff'),
+    url('fonts/icomoon.svg?othf1z#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.i {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.i-home:before {
+  content: "\e900";
+}
+.i-office:before {
+  content: "\e903";
+}
+.i-pencil:before {
+  content: "\e905";
+}
+.i-pencil2:before {
+  content: "\e906";
+}
+.i-calendar:before {
+  content: "\e953";
+}
+.i-printer:before {
+  content: "\e954";
+}
+.i-database:before {
+  content: "\e964";
+}
+.i-undo:before {
+  content: "\e965";
+}
+.i-redo:before {
+  content: "\e966";
+}
+.i-undo2:before {
+  content: "\e967";
+}
+.i-user:before {
+  content: "\e971";
+}
+.i-users:before {
+  content: "\e972";
+}
+.i-user-plus:before {
+  content: "\e973";
+}
+.i-user-minus:before {
+  content: "\e974";
+}
+.i-equalizer:before {
+  content: "\e992";
+}
+.i-equalizer2:before {
+  content: "\e993";
+}
+.i-cog:before {
+  content: "\e994";
+}
+.i-cogs:before {
+  content: "\e995";
+}
+.i-tree:before {
+  content: "\e9bc";
+}
+.i-earth:before {
+  content: "\e9ca";
+}
+.i-link:before {
+  content: "\e9cb";
+}
+.i-eye:before {
+  content: "\e9ce";
+}
+.i-eye-plus:before {
+  content: "\e9cf";
+}
+.i-eye-minus:before {
+  content: "\e9d0";
+}
+.i-eye-blocked:before {
+  content: "\e9d1";
+}
+.i-star-empty:before {
+  content: "\e9d7";
+}
+.i-star-half:before {
+  content: "\e9d8";
+}
+.i-warning:before {
+  content: "\ea07";
+}
+.i-notification:before {
+  content: "\ea08";
+}
+.i-cross:before {
+  content: "\ea0f";
+}
+.i-checkmark:before {
+  content: "\ea10";
+}
+.i-checkmark2:before {
+  content: "\ea11";
+}
+.i-loop2:before {
+  content: "\ea2e";
+}
