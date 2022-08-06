@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class Cuestionario
  * 
  * @property int $idCuestionario
+ * @property string $codigo
  * @property string $titulo
  * @property string $descripcion
  * @property Carbon $fechaCreacion
@@ -54,6 +55,7 @@ class Cuestionario extends Model
 	];
 
 	protected $fillable = [
+		'codigo',
 		'titulo',
 		'descripcion',
 		'fechaCreacion',

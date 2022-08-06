@@ -53,7 +53,7 @@
                 @foreach($cuestionarios as $nivel)
                     <tr>
                         <td>{{$nivel->titulo}}</td>
-                        <td>{{$nivel->fechaCreacion}}</td>
+                        <td><?php echo date_format($nivel->fechaCreacion,"d-m-Y");?></td>
                         <td>
                             @if($nivel->disponible==1)
                                 Disponible
@@ -67,17 +67,17 @@
                             <form action='{{route("cuestionarios.edit", [$nivel])}}' method="post" >
                                 @method("get")
                                 @csrf
-                                <button type="submit" class="btn btn-warning text-white" style="margin-left:5px;">
+                                <button type="submit" class="btn btn-warning text-white" style="margin-left:5px;width:25px;height:29px;">
                                     <i class="fa fa-edit"></i>
                                 </button>
                             </form>
-                            <form action='{{route("cuestionarios.destroy", [$nivel])}}' method="post" onsubmit="return validate(event,this,{{$nivel->idCuestionario}})">
-                                @method("delete")
-                                @csrf
-                                <button type="submit" class="btn btn-danger" style="margin-left:5px;">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </form>
+                            <button type="submit" class="btn btn-success" style="margin-left:5px;" onclick="copyCode('{{$nivel->codigo}}')">
+                                 <i class="fa fa-clipboard"></i>
+                            </button>
+                            <?php $route = route("cuestionarios.caso_estudio",[$nivel->codigo]);?>
+                            <button type="submit" class="btn btn-primary" style="margin-left:5px;" onclick='copyLink("<?php echo $route;?>")'>
+                                 <i class="fa fa-link"></i>
+                            </button>
                            
                         </td>
                     </tr>
@@ -92,5 +92,5 @@
    
 </div>
  
-<script src="{{ URL::asset('js/cuestionario/list.js'); }}"></script>     
+<script src="{{ URL::asset('js/cuestionarios/list.js'); }}"></script>     
 @stop

@@ -46,22 +46,25 @@
         <div class="row" style="margin-top:5px;">
             <div class="col-sm-12 form-inline text-end">
                 <label class="text-danger font-weight-bold" style="width:30%;justify-content: end; margin-right: 5px;">Género:</label>
-                 <input type="number" class="form-control" style="width:67%;" id="genero"/>
+                 <select class="form-select" style="width:67%;" id="genero">
+                    <option value='0'>Hombre</option>
+                    <option value='1'>Mujer</option>
+                </select>
                  <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
              </div>
         </div>
         <div class="row" style="margin-top:5px;">
             <div class="col-sm-12 form-inline text-end">
                 <label class="text-danger font-weight-bold" style="width:30%;justify-content: end; margin-right: 5px;">Trabajo:</label>
-                 <input type="number" class="form-control" style="width:67%;" id="trabajo"/>
+                 <input type="text" class="form-control" style="width:67%;" id="trabajo"/>
                  <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
              </div>
         </div>
         
         <div class="row" style="margin-top:5px;">
             <div class="col-sm-12 form-inline text-end">
-                <label class="text-danger font-weight-bold" style="width:30%;justify-content: end; margin-right: 5px;">Hijos:</label>
-                 <input type="number" class="form-control" style="width:67%;" id="edad" value="0"/>
+                <label class="font-weight-bold" style="width:30%;justify-content: end; margin-right: 5px;">Hijos:</label>
+                 <input type="number" class="form-control" style="width:67%;" id="hijos" value="0"/>
                  <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
              </div>
         </div>
@@ -69,7 +72,7 @@
             <div class="col-sm-12 form-inline text-end">
                 <label class="text-danger font-weight-bold" style="width:30%;justify-content: end; margin-right: 5px;">Imagen:</label>
                  <select class="form-select" id="img" style="width:67%;">
-                    <?php for($i=1;$i<4;$i++){ ?>
+                    <?php for($i=1;$i<24;$i++){ ?>
                     <option value="<?php echo $i;?>" data-active="0">Avatar <?php echo $i;?></option>
                     <?php } ?>
                  </select>
@@ -78,7 +81,11 @@
         </div>
         
     </div>
-    <div class="col-sm-6"></div>
+    <div class="col-sm-6 d-flex justify-content-center align-items-center">
+        <div class="col-sm-12 d-flex justify-content-center align-items-center">
+                        <img src="../assets/avatars/avatar1.png" id='profile' style="width:255px;"/>
+        </div>
+    </div>
     <div class="col-sm-12" style="padding:10px 20px 0px 20px;">
         <div class="section">CASO</div>
     </div>
@@ -130,7 +137,17 @@
                  <input type="text" class="form-control" style="width:67%;" id="pregunta"/>
                  <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
              </div>
-             <div class="col-sm-12 " style="margin-top:5px;">
+             <div class="col-sm-12 form-inline text-end" style="margin-top:5px;">
+                <label class="text-danger font-weight-bold" style="width:30%;justify-content: end; margin-right: 5px;">Detalles:</label>
+                 <textarea class="form-control" style="width:67%;height:120px;" id="detalles"></textarea>
+                 <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
+             </div>
+             <div class="col-sm-12 form-inline text-end" style="margin-top:5px;">
+                <label class="text-danger font-weight-bold" style="width:30%;justify-content: end; margin-right: 5px;">Ayuda:</label>
+                 <textarea  class="form-control" style="width:67%;height:120px;" id="ayuda"></textarea>
+                 <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
+             </div>
+             <div class="col-sm-12 d-flex justify-content-end" style="margin-top:5px;">
                 <button class="btn btn-success" id="addPregunta">Agregar Pregunta</button>
              </div>
              <div class="col-sm-12 " style="margin-top:5px;" id="preguntas">
@@ -140,7 +157,7 @@
     </div>
     <div class="col-sm-6"></div>
     <div class="col-sm-6 d-flex justify-content-end" style="padding:10px 25px 0px 20px;">
-        <button class="btn btn-success">Aceptar</button>
+        <button class="btn btn-success" id="save">Aceptar</button>
         <button class="btn btn-warning text-white" style="margin-left:5px">Cancelar</button>
         <button class="btn btn-primary" style="margin-left:5px">Limpiar</button>
     </div>

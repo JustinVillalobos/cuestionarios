@@ -25,6 +25,7 @@ Route::get('busquedaCuestionario',[CuestionariosController::class, 'busqueda'])-
 Route::post('cuestionarios/store',[CuestionariosController::class, 'store'])->name('cuestionarios.store');
 Route::post('cuestionarios/update',[CuestionariosController::class, 'update'])->name('cuestionarios.update');
 Route::post('cuestionarios/destroy',[CuestionariosController::class, 'destroy'])->name('cuestionarios.destroy');
+Route::get('caso_estudio',[CuestionariosController::class, 'caso_estudio'])->name('cuestionarios.caso_estudio');
 
 Route::resource('usuarios',UsuariosController::class);
 Route::get('busqueda',[UsuariosController::class, 'busqueda'])->name('usuarios.busqueda');
@@ -37,3 +38,4 @@ Route::get('perfil',[UsuariosController::class, 'perfil'])->name('usuarios.perfi
 Route::get('inicio_sesion',[LoginController::class, 'index'])->name('login.index');
 
 Route::post('loginValidator',[LoginController::class, 'loginValidator'])->name('login.loginValidator');
+

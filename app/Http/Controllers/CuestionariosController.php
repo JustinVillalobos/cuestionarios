@@ -78,6 +78,16 @@ class CuestionariosController extends Controller
         //
         return view('cuestionarios.add');
     }
+    public function caso_estudio($codigo)
+    {
+        //
+        return view('cuestionarios.add');
+    }
+
+    function generarCadenaAleatoria($length = 10)
+    {
+        return substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length / strlen($x)))), 1, $length);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -88,6 +98,45 @@ class CuestionariosController extends Controller
     public function store(Request $request)
     {
         //
+        $input = $request->all();
+        $datos= $input['cuestionario'];
+        $code = $this->generarCadenaAleatoria(24);
+        $codeSearch=true;
+        while($codeSearch){
+            $cuestionarios=Cuestionario::where('codigo','=',$code)->get();
+            if(count($cuestionarios)>0){
+                $code = $this->generarCadenaAleatoria(24);
+            }else{
+                $codeSearch=false;
+            }
+        }
+        $_SESSION['autor']=$_SESSION['id'];
+        $datos['hijos']="0";
+        $datos['fecha'] = date("y-m-d");
+        $cuestionario = new Cuestionario([
+            'codigo'=>$code,
+            'titulo'=>$datos['titulo'],
+            'descripcion'=>$datos['descripcion'],
+            'fechaCreacion'=>$datos['fecha'],
+            'disponible'=>1,
+            'autor'=>$_SESSION['autor'],
+            'antecedentesPersonales'=>$datos['antecedentesPersonales'],
+            'antecedentesFamiliares'=>$datos['antecedentesFamiliares'],
+            'motivoConsulta'=>$datos['motivo'],
+            'revision'=>$datos['revision'],
+            'edad'=>$datos['edad'],
+            'imagen'=>$datos['imagen'],
+            'genero'=>$datos['genero'],
+            'trabajo'=>$datos['trabajo'],
+            'hijos'=>$datos['hijos']
+        ]);
+        try{
+            $cuestionario->save();
+            echo json_encode(true);
+        }catch(\Illuminate\Database\QueryException $e){
+            echo json_encode($e);
+        }
+        
     }
 
     /**
