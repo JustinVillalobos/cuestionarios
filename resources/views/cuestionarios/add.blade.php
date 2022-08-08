@@ -10,8 +10,8 @@
         <div class="" style="padding-left:5px;">
             <ol class="breadcrumb">
 
-            <li class="breadcrumb-item"><a href='{{route("cuestionarios.index")}}' class="text-info"> <h5><i class="fa fa-book" aria-hidden="true"></i>Cuestionarios</h5></a></li>
-                <li class="breadcrumb-item active" aria-current="page">Agregar Cuestionario</li>
+            <li class="breadcrumb-item"><a href='{{route("cuestionarios.index")}}' class="text-info"> <h5><i class="fa fa-book" aria-hidden="true"></i>Casos De Estudio</h5></a></li>
+                <li class="breadcrumb-item active" aria-current="page">Agregar Caso de Estudio</li>
                 
             </ol>
         </div>
@@ -96,7 +96,7 @@
             </div>
             <div class="col-sm-10 form-inline text-end" style="padding-left:0px;height:350px">
                  <textarea class="form-control" style="width:100%;height:250px" id="antecedentesPersonales"></textarea>
-                 <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
+                 <span id="antecedentePersonalSpan" class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
              </div>
         </div>
         <div class="row" style="margin-top:5px;">
@@ -105,7 +105,7 @@
             </div>
             <div class="col-sm-10 form-inline text-end" style="padding-left:0px;height:350px">
                  <textarea class="form-control" style="width:100%;height:250px" id="antecedentesFamiliares"></textarea>
-                 <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
+                 <span id="antecedentesFamiliaresSpan" class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
              </div>
         </div>
         <div class="row" style="margin-top:5px;">
@@ -114,7 +114,7 @@
             </div>
             <div class="col-sm-10 form-inline text-end" style="padding-left:0px;height:350px">
                  <textarea class="form-control" style="width:100%;height:250px" id="motivo"></textarea>
-                 <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
+                 <span id="motivoSpan" class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
              </div>
         </div>
         <div class="row" style="margin-top:5px;">
@@ -123,7 +123,7 @@
             </div>
             <div class="col-sm-10 form-inline text-end" style="padding-left:0px;height:350px">
                  <textarea class="form-control" style="width:100%;height:250px" id="revision"></textarea>
-                 <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
+                 <span id="revisionSpan" class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
              </div>
         </div>
     </div>
@@ -143,8 +143,13 @@
                  <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
              </div>
              <div class="col-sm-12 form-inline text-end" style="margin-top:5px;">
-                <label class="text-danger font-weight-bold" style="width:30%;justify-content: end; margin-right: 5px;">Ayuda:</label>
+                <label class="text-danger font-weight-bold" style="width:30%;justify-content: end; margin-right: 5px;">Informaci&oacuten adicional:</label>
                  <textarea  class="form-control" style="width:67%;height:120px;" id="ayuda"></textarea>
+                 <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
+             </div>
+             <div class="col-sm-12 form-inline text-end" style="margin-top:5px;">
+                <label class="text-danger font-weight-bold" style="width:30%;justify-content: end; margin-right: 5px;">Comentarios o definiciones:</label>
+                 <textarea  class="form-control" style="width:67%;height:120px;" id="definiciones"></textarea>
                  <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
              </div>
              <div class="col-sm-12 d-flex justify-content-end" style="margin-top:5px;">

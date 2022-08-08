@@ -1,11 +1,11 @@
 body{
-    background: rgba(235,233,249,1);
-    background: -moz-linear-gradient(left, rgba(235,233,249,1) 0%, rgba(216,208,239,1) 39%, rgba(206,199,236,1) 51%, rgba(201,196,235,1) 71%, rgba(193,191,234,1) 100%);
-    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(235,233,249,1)), color-stop(39%, rgba(216,208,239,1)), color-stop(51%, rgba(206,199,236,1)), color-stop(71%, rgba(201,196,235,1)), color-stop(100%, rgba(193,191,234,1)));
-    background: -webkit-linear-gradient(left, rgba(235,233,249,1) 0%, rgba(216,208,239,1) 39%, rgba(206,199,236,1) 51%, rgba(201,196,235,1) 71%, rgba(193,191,234,1) 100%);
-    background: -o-linear-gradient(left, rgba(235,233,249,1) 0%, rgba(216,208,239,1) 39%, rgba(206,199,236,1) 51%, rgba(201,196,235,1) 71%, rgba(193,191,234,1) 100%);
-    background: -ms-linear-gradient(left, rgba(235,233,249,1) 0%, rgba(216,208,239,1) 39%, rgba(206,199,236,1) 51%, rgba(201,196,235,1) 71%, rgba(193,191,234,1) 100%);
-    background: linear-gradient(to right, rgba(235,233,249,1) 0%, rgba(216,208,239,1) 39%, rgba(206,199,236,1) 51%, rgba(201,196,235,1) 71%, rgba(193,191,234,1) 100%);
+    background: #191d1e; /* Old browsers */
+	background: -moz-linear-gradient(0deg,  #191d1e 50%, #283139 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right bottom, color-stop(50%,#191d1e), color-stop(100%,#283139)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(0deg,  #191d1e 50%,#283139 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(0deg,  #191d1e 50%,#283139 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(0deg,  #191d1e 50%,#283139 100%); /* IE10+ */
+	background: linear-gradient(0deg,  #191d1e 50%,#283139 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ebe9f9', endColorstr='#c1bfea', GradientType=1 );
 }
 .login-box {

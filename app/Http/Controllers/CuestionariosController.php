@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Usuario;
 use App\Models\Pregunta;
 use App\Models\Cuestionario;
+use App\Models\Puntaje;
 session_start();
 class CuestionariosController extends Controller
 {
@@ -20,7 +21,7 @@ class CuestionariosController extends Controller
         if($_SESSION['id']==1){
             $cuestionarios =Cuestionario::select('cuestionarios.*')->paginate(10);
         }else{
-            $cuestionarios =Cuestionario::where('idCuestionario','!=','1')->paginate(10);
+            $cuestionarios =Cuestionario::where('autor','!=','1')->paginate(10);
         }
         $data = [
             'cuestionarios'=>$cuestionarios,
@@ -56,7 +57,11 @@ class CuestionariosController extends Controller
             $_SESSION['limit'] = $input['limit'];
         }
         $limit = $input['limit'];
-        $cuestionarios =Cuestionario::select('cuestionarios.*');
+        if($_SESSION['id']==1){
+            $cuestionarios =Cuestionario::select('cuestionarios.*');
+        }else{
+            $cuestionarios =Cuestionario::where('autor','!=','1');
+        }
                   
         $cuestionarios =$cuestionarios->where("cuestionarios.titulo","LIKE","%{$input['search']}%");
          
@@ -78,9 +83,11 @@ class CuestionariosController extends Controller
         //
         return view('cuestionarios.add');
     }
-    public function caso_estudio($codigo)
+    public function caso_estudio(Request $request)
     {
         //
+        $input = $request->all();
+        var_dump($input);
         return view('cuestionarios.add');
     }
 
@@ -132,7 +139,41 @@ class CuestionariosController extends Controller
         ]);
         try{
             $cuestionario->save();
-            echo json_encode(true);
+            $cuestionaro_insertado = Cuestionario::where('codigo','=',$code)->first();
+            if(!empty($cuestionaro_insertado)){
+                $preguntas = $datos['preguntas'];
+                for($i=0;$i<count($preguntas);$i++){
+                    $pregunta = $preguntas[$i];
+                    if(count($pregunta['respuestas'])==3){
+                        $respuesta3 = $pregunta['respuestas'][2]['respuesta'];
+                        $respuesta4="";
+                    }else if(count($pregunta['respuestas'])==4){
+                        $respuesta3 = $pregunta['respuestas'][2]['respuesta'];
+                        $respuesta4=$pregunta['respuestas'][3]['respuesta'];
+                    }else{
+                        $respuesta3="";
+                        $respuesta4="";
+                    }
+                    $p = new Pregunta([
+                        'pregunta'=>$pregunta['pregunta'],
+                        'respuesta1'=>$pregunta['respuestas'][0]['respuesta'],
+                        'respuesta2'=>$pregunta['respuestas'][1]['respuesta'],
+                        'respuesta3'=>$respuesta3,
+                        'respuesta4'=>$respuesta4,
+                        'solucion'=>$pregunta['solucion'],
+                        'detalles'=>$pregunta['detalles'],
+                        'ayuda'=>$pregunta['ayuda'],
+                        'definiciones'=>$pregunta['definiciones'],
+                        'idCuestionario'=>$cuestionaro_insertado->idCuestionario,
+                    ]);
+                    $p->save();
+                    
+                }
+                echo json_encode(true);
+            }else{
+                echo json_encode(false);
+            }
+            
         }catch(\Illuminate\Database\QueryException $e){
             echo json_encode($e);
         }
@@ -168,9 +209,21 @@ class CuestionariosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        $input = $request->all();
+
+        $codigo = $input['codigo'];
+        $disponible=$input['disponible'];
+        $cuestionario =Cuestionario::where('codigo','=',$codigo)->first();
+        try{
+            $cuestionario->disponible =$disponible;
+            $cuestionario->save();
+            echo json_encode(true);
+        }catch(\Illuminate\Database\QueryException $e){
+            echo json_encode($e);
+        }
     }
 
     /**
@@ -179,8 +232,22 @@ class CuestionariosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         //
+        $input = $request->all();
+
+        $codigo = $input['codigo'];
+        $cuestionario =Cuestionario::where('codigo','=',$codigo)->first();
+        $puntajes =Puntaje::where('idCuestionario','=',$cuestionario->idCuestionario);
+        $preguntas =Pregunta::where('idCuestionario','=',$cuestionario->idCuestionario);
+        try{
+            $puntajes->delete();
+            $preguntas->delete();
+            $cuestionario->delete();
+            echo json_encode(true);
+        }catch(\Illuminate\Database\QueryException $e){
+            echo json_encode($e);
+        }
     }
 }

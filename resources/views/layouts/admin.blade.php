@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>NetMD</title>
+        <meta name="google-translate-customization" content="9f841e7780177523-3214ceb76f765f38-gc38c6fe6f9d06436-c"></meta>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +26,35 @@
         <!-- Styles -->
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         
-       
+        <style>
+.google-translate {
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 15px;
+}
+
+.goog-logo-link {
+    display: none !important;
+}
+
+.goog-te-gadget {
+    color: transparent !important;
+}
+
+#google_translate_element {
+   
+}
+
+.goog-te-banner-frame.skiptranslate {
+    display: none !important;
+}
+
+body {
+    top: 0px !important;
+}
+
+</style>
+
     </head>
     <body class="antialiased">
         <header >
@@ -33,14 +62,14 @@
                 <div class="col-sm-4">
                 <img src="{{ URL::asset('assets/LOGO NET.jpeg'); }}" style="width:220px;"/>
                 </div>
-                <div class="col-sm-4 d-flex text-center align-items-center justify-content-center">
+                <div class="col-sm-4 d-flex text-center align-items-center justify-content-center" >
                    <label> Aplicación Administrativa</label>
                 </div>
-                <div class="col-sm-4"></div>
+                <div class="col-sm-4 d-flex justify-content-end text-center align-items-center" id="google_translate_element"></div>
              </div>
         </header>
         <nav class="d-flex align-items-center" style="padding: 0px 10px 0px 10px;    margin-top: 35px;opacity:0.9;">
-             <div class="row w-100">
+             <div class="row " style="width: 99%;">
                 <div class="col-sm-2 d-flex align-items-center justify-content-center text-center border-right">
                     <a href="{{route('cuestionarios.index')}}" class="text-white font-weight-bold"><i class="fa fa-cog" aria-hidden="true"></i> Cuestionarios</a>
                 </div>
@@ -73,11 +102,20 @@
                 <div class="col-sm-3"></div>
             </div>
         </footer>
+        <script src="http://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
         <script src="{{ URL::asset('plugins/sweetalert2/dist/sweetalert2.all.min.js'); }}"></script>
         <script src="{{ URL::asset('plugins/DataTables/datatables.min.js'); }}"></script>
         <script src="{{ URL::asset('js/Validaciones.js'); }}"></script>
         <script src="{{ URL::asset('js/alerts.js'); }}"></script>
-
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                {pageLanguage: 'en'},
+                'google_translate_element'
+            );
+            $('#google_translate_element select').addClass("form-select");
+        }
+    </script>
     </body>
 </html>
