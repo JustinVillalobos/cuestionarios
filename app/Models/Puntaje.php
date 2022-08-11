@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  * Class Puntaje
  * 
  * @property int $idPuntaje
+ * @property string $codigo
+ * @property string $nombre
  * @property Carbon $fechaCreacion
  * @property int $puntajeCorrecto
  * @property int $puntajeIncorrecto
@@ -39,6 +41,8 @@ class Puntaje extends Model
 	];
 
 	protected $fillable = [
+		'codigo',
+		'nombre',
 		'fechaCreacion',
 		'puntajeCorrecto',
 		'puntajeIncorrecto',

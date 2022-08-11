@@ -126,9 +126,40 @@
                  <span id="revisionSpan" class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
              </div>
         </div>
+        <div class="row" style="margin-top:5px;">
+            <div class="col-sm-2 form-inline text-end" style="padding-right:0px;">
+                <label class="text-danger font-weight-bold" style="justify-content: end; margin-right: 5px;">Adjuntar Imágen:</label>
+            </div>
+            <div class="col-sm-10 form-inline text-end" style="padding-left:0px;">
+                    <input type="file" class="form-control" id="file"  style="width:100%;"/>
+                    <span id="revisionSpan" class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
+             </div>
+        </div>
+        <div class="row" style="margin-top:5px;">
+            <div class="col-sm-2 form-inline text-end" style="padding-right:0px;">
+                <label class="text-danger font-weight-bold" style="justify-content: end; margin-right: 5px;">Secci&oacuten Imágen:</label>
+            </div>
+            <div class="col-sm-10 form-inline text-end" style="padding-left:0px;">
+                    <select class="form-select" id="seccion"  style="width:100%;">
+                        <option value="0">Ninguna</option>
+                        <option value="1">M&oacutetivo Consulta</option>
+                        <option value="2">Revisi&oacuten</option>
+                        <option value="3">Antecedentes Familiares</option>
+                        <option value="4">Antecedentes Personales</option>
+                    </select>
+                    <span id="revisionSpan" class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
+             </div>
+        </div>
     </div>
     <div class="col-sm-12" style="padding:10px 20px 0px 20px;">
-        <div class="section">PREGUNTAS</div>
+        <div class="section">
+            <div class="row">
+                <div class="col-sm-11">PREGUNTAS</div>
+                <div class="col-sm-1 d-flex text-center justify-content-center align-items-center">
+                    <button class="btn btn-primary d-flex text-center justify-content-center align-items-center" onclick="reload()" style="width:20px;height:20px;"><i class="fa fa-refresh"></i></button>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="col-sm-12" style="padding:10px 20px 0px 20px;">
         <div class="row">

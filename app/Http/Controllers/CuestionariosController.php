@@ -7,6 +7,7 @@ use App\Models\Usuario;
 use App\Models\Pregunta;
 use App\Models\Cuestionario;
 use App\Models\Puntaje;
+
 session_start();
 class CuestionariosController extends Controller
 {
@@ -87,8 +88,29 @@ class CuestionariosController extends Controller
     {
         //
         $input = $request->all();
-        var_dump($input);
-        return view('cuestionarios.add');
+        $cuestionario= Cuestionario::where("codigo",'=',$input['codigo'])->first();
+        $data = [
+            'cuestionario'=>$cuestionario
+        ];
+        return view('cuestionarios.caso_estudio',$data);
+    }
+    public function imagen(Request $request){
+        
+        $imagen = $request->file('image');
+        if(empty($imagen)){
+            return "";
+        }
+        $extension = $imagen->getClientOriginalExtension();
+        $randomName = $this->generarCadenaAleatoria(15);
+        $filename= "Img ".$randomName.".".$extension;
+        
+        $public_path = public_path('assets/cuestionarios');
+        while(file_exists($public_path."/".$filename)){
+            $filename= "Img ".$randomName.".".$extension;
+        }
+        $path = 'assets/cuestionarios/'.$filename;
+        $imagen->move($public_path,$filename);
+        return $path;
     }
 
     function generarCadenaAleatoria($length = 10)
@@ -117,6 +139,8 @@ class CuestionariosController extends Controller
                 $codeSearch=false;
             }
         }
+        $path = $datos['imagenSeccion'];
+        
         $_SESSION['autor']=$_SESSION['id'];
         $datos['hijos']="0";
         $datos['fecha'] = date("y-m-d");
@@ -135,7 +159,9 @@ class CuestionariosController extends Controller
             'imagen'=>$datos['imagen'],
             'genero'=>$datos['genero'],
             'trabajo'=>$datos['trabajo'],
-            'hijos'=>$datos['hijos']
+            'hijos'=>$datos['hijos'],
+            'imagenSeccion'=>$path,
+            'seccion'=>$datos['seccion']
         ]);
         try{
             $cuestionario->save();
@@ -180,6 +206,40 @@ class CuestionariosController extends Controller
         
     }
 
+    public function busquedaSala(Request $request){
+        $input =   $request->all(); 
+        
+        if(is_null($input['limit'])){
+            $input['limit'] = $_SESSION['limit'];
+            $input['salaData'] = $_SESSION['salaData'];
+            $input['idSala'] = $_SESSION['idSala'];
+        }else{
+            $_SESSION['limit'] = $input['limit'];
+            $_SESSION['salaData'] = $input['salaData'];
+            $_SESSION['idSala'] = $input['idSala'];
+        }
+        $limit = $input['limit'];
+        $salaData = $input['salaData'];
+        $cuestionario= Cuestionario::where("idCuestionario",'=',$input['idSala'])->first();
+        $puntajes =Puntaje::select('puntajes.*')->where('idCuestionario','=',$input['idSala']);
+        if($salaData=="1"){
+            $puntajes->where('fechaCreacion','=',date('y-m-d'));
+        }
+        
+        $puntajes =$puntajes->paginate($limit);
+        $preguntas = Pregunta::where("idCuestionario",'=',$input['idSala'])->get();
+        $cantidad = count($preguntas);
+        $data = [
+            'cuestionario'=>$cuestionario,
+            'search'=>"",
+            'limit'=>$limit,
+            'salaData'=>$salaData,
+            'idSala'=>$input['idSala'],
+            'cantidad'=>$cantidad,
+            'puntajes'=>$puntajes
+        ];
+        return view('cuestionarios.sala',$data);
+    }
     /**
      * Display the specified resource.
      *
@@ -189,6 +249,46 @@ class CuestionariosController extends Controller
     public function show($id)
     {
         //
+
+        $cuestionario= Cuestionario::where("idCuestionario",'=',$id)->first();
+        $preguntas = Pregunta::where("idCuestionario",'=',$id)->get();
+        $cantidad = count($preguntas);
+        if($cantidad==0){
+            $cantidad=1;
+        }
+        $puntajes =Puntaje::select('puntajes.*')->orderBy('puntajeCorrecto', 'desc')->paginate(10);
+        $data = [
+            'cuestionario'=>$cuestionario,
+            'search'=>"",
+            'limit'=>10,
+            'salaData'=>"0",
+            'idSala'=>$cuestionario->idCuestionario,
+            'cantidad'=>$cantidad,
+            'puntajes'=>$puntajes
+        ];
+        return view("cuestionarios.sala",$data);
+    }
+    public function ajaxFetch(Request $request){
+        $input =   $request->all(); 
+        
+        $limit = $input['limit'];
+        $salaData = $input['salaData'];
+        $puntajes =Puntaje::select('puntajes.*')->where('idCuestionario','=',$input['idSala']);
+        if($salaData=="1"){
+            $puntajes->where('fechaCreacion','=',date('y-m-d'));
+        }
+        $puntajes =$puntajes->orderBy('puntajeCorrecto', 'desc');
+        $puntajes =$puntajes->paginate($limit);
+        $preguntas = Pregunta::where("idCuestionario",'=',$input['idSala'])->get();
+        $cantidad = count($preguntas);
+        if($cantidad==0){
+            $cantidad=1;
+        }
+        $data = [
+            'cantidad'=>$cantidad,
+            'puntajes'=>$puntajes
+        ];
+        return view('cuestionarios.table',$data)->render();
     }
 
     /**

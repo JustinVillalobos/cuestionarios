@@ -21,10 +21,14 @@ Route::get('/',[homeController::class, 'index'])->name('home.index');
 
 Route::resource('cuestionarios',CuestionariosController::class);
 Route::get('busquedaCuestionario',[CuestionariosController::class, 'busqueda'])->name('cuestionarios.busqueda');
+Route::get('busquedaSala',[CuestionariosController::class, 'busquedaSala'])->name('cuestionarios.busquedaSala');
 Route::post('cuestionarios/store',[CuestionariosController::class, 'store'])->name('cuestionarios.store');
 Route::post('cuestionarios/update',[CuestionariosController::class, 'update'])->name('cuestionarios.update');
 Route::post('cuestionarios/destroy',[CuestionariosController::class, 'destroy'])->name('cuestionarios.destroy');
+Route::post('cuestionarios/imagen',[CuestionariosController::class, 'imagen'])->name('cuestionarios.imagen');
 Route::get('caso_estudio',[CuestionariosController::class, 'caso_estudio'])->name('cuestionarios.caso_estudio');
+
+Route::post('live',[CuestionariosController::class, 'ajaxFetch'])->name('cuestionarios.ajaxFetch');
 
 Route::resource('usuarios',UsuariosController::class);
 Route::get('busqueda',[UsuariosController::class, 'busqueda'])->name('usuarios.busqueda');

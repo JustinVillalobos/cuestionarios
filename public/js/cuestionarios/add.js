@@ -5,81 +5,27 @@ var revision = document.getElementById('revision');
 var detalles = document.getElementById('detalles');
 var ayuda = document.getElementById('ayuda');
 var definiciones = document.getElementById('definiciones');
-
-sceditor.create(antecedentesPersonales, {
+let optionsSCeditor = {
 	format: 'bbcode',
     plugins: 'undo',
     icons: 'monocons',
    
-	toolbar: 'bold,italic,underline|source|font,removeformat|copy,cut,paste|bulletlist,orderedlist',
+	toolbar: 'bold,italic,underline|image|font,removeformat|copy,cut,paste|bulletlist,orderedlist',
 	style: 'https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/content/default.min.css',
     locale: 'no-NB',
     emoticonsEnabled:false
-});
-sceditor.create(antecedentesFamiliares, {
-	format: 'bbcode',
-    plugins: 'undo',
-    icons: 'monocons',
-   
-	toolbar: 'bold,italic,underline|source|font,removeformat|copy,cut,paste|bulletlist,orderedlist',
-	style: 'https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/content/default.min.css',
-    locale: 'no-NB',
-    emoticonsEnabled:false
-});
+}
+sceditor.create(antecedentesPersonales,optionsSCeditor);
+sceditor.create(antecedentesFamiliares, optionsSCeditor);
 
 
-sceditor.create(motivo, {
-	format: 'bbcode',
-    plugins: 'undo',
-    icons: 'monocons',
-   
-	toolbar: 'bold,italic,underline|source|font,removeformat|copy,cut,paste|bulletlist,orderedlist',
-	style: 'https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/content/default.min.css',
-    locale: 'no-NB',
-    emoticonsEnabled:false
-});
+sceditor.create(motivo,optionsSCeditor);
 
 
-sceditor.create(revision, {
-	format: 'bbcode',
-    plugins: 'undo',
-    icons: 'monocons',
-   
-	toolbar: 'bold,italic,underline|source|font,removeformat|copy,cut,paste|bulletlist,orderedlist',
-	style: 'https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/content/default.min.css',
-    locale: 'no-NB',
-    emoticonsEnabled:false
-});
-sceditor.create(detalles, {
-	format: 'bbcode',
-    plugins: 'undo',
-    icons: 'monocons',
-   
-	toolbar: 'bold,italic,underline|source|font,removeformat|copy,cut,paste|bulletlist,orderedlist',
-	style: 'https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/content/default.min.css',
-    locale: 'no-NB',
-    emoticonsEnabled:false
-});
-sceditor.create(ayuda, {
-	format: 'bbcode',
-    plugins: 'undo',
-    icons: 'monocons',
-   
-	toolbar: 'bold,italic,underline|source|font,removeformat|copy,cut,paste|bulletlist,orderedlist',
-	style: 'https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/content/default.min.css',
-    locale: 'no-NB',
-    emoticonsEnabled:false
-});
-sceditor.create(definiciones, {
-	format: 'bbcode',
-    plugins: 'undo',
-    icons: 'monocons',
-   
-	toolbar: 'bold,italic,underline|source|font,removeformat|copy,cut,paste|bulletlist,orderedlist',
-	style: 'https://cdn.jsdelivr.net/npm/sceditor@3/minified/themes/content/default.min.css',
-    locale: 'no-NB',
-    emoticonsEnabled:false
-});
+sceditor.create(revision, optionsSCeditor);
+sceditor.create(detalles, optionsSCeditor);
+sceditor.create(ayuda, optionsSCeditor);
+sceditor.create(definiciones,optionsSCeditor);
 let indice=1;
 function format (option) {
     if (!option.id) { return option.text; }
@@ -143,10 +89,97 @@ $( document ).ready(function() {
         }
     }
     desplaceTop();
+    var $avatarImage,$avatarInput,$avatarForm;
+    $avatarInput = $("#file");
+    $avatarForm = $("#form");
+    
+    $avatarInput.on('change',function(){
+        //uploadImage();
+    });
 });
 let indicePregunta=1;
 let preguntas=[];
 let html="";
+function uploadImage(cuestionario,cantidadErrores,isValid){
+    var $avatarImage,$avatarInput,$avatarForm;
+    $avatarInput = $("#file");
+    $avatarForm = $("#form");
+    var formData = new FormData();
+        $avatarImage = $avatarInput[0].files[0];
+        console.log($avatarImage.type);
+        if( $avatarInput[0].files>1){
+            $("#file + span").text("Solo se permite subir una imagen");
+            $("#file").val("")
+            return;
+        }
+        if($avatarImage.size>1000000){
+            $("#file + span").text("Tamaño de la imagen muy grande");
+            $("#file").val("")
+            return;
+        }
+        if($avatarImage.type!="image/jpeg" && $avatarImage.type!="image/png" && $avatarImage.type!="image/jpg" && $avatarImage.type!="image/svg" && $avatarImage.type!="image/gif"){
+            $("#file + span").text("Formato de archivo no aceptado, solo permitido PNG,JPG,JPEG,GIF,SVG");
+            $("#file").val("")
+            return;
+        }
+        $("#file + span").text("");
+        formData.append('image',$avatarInput[0].files[0]);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+          $.ajax({
+            type:'POST',
+            url:'../cuestionarios/imagen',
+            data:formData,
+            processData:false,
+            contentType:false,
+            success:function(data){
+                console.log(data);
+                save(data,cuestionario,cantidadErrores,isValid);
+        
+            },
+            error:function(data){
+                console.log("ERROR",data);
+                alertError("Error inesperado en el servidor");
+            }
+        
+         });
+}
+function reload(){
+    if(localStorage.getItem('indice')!=undefined){
+        if(localStorage.getItem('indice')!=''){
+            $("#preguntas").html("");
+            indicePregunta = 1;
+           
+            preguntas = JSON.parse(localStorage.getItem('preguntas'));
+            
+            console.log("INGRESO INICIO",preguntas);
+            preguntas.forEach((element,i) => {
+                preguntas[i].indice = i;
+                addPregunta(indicePregunta,element.pregunta,element.detalles,element.ayuda,element.definiciones);
+                indicePregunta++;
+               
+            });
+            $("#preguntas").append(html);
+            console.log("HILO");
+            indicePregunta = 1;
+            preguntas.forEach(element => {
+                if(element.respuestas.length!=0){
+                    element.respuestas.forEach((resp,indexRespuesta) => {
+                        respuesta((indicePregunta-1),indicePregunta,resp.respuesta,indexRespuesta);
+                    });
+                }
+                indicePregunta++;
+            });
+           
+            html="";
+            localStorage.setItem('indice',indicePregunta);
+            localStorage.setItem('preguntas',JSON.stringify(preguntas));
+        }
+    }
+}
 function remove(indice){
     if(preguntas.length==1){
         preguntas.splice(0,1);
@@ -186,7 +219,7 @@ function addPregunta(i,pregunta,de,ay,def){
             html+="<div class='row'><div class='col-sm-12'><h3>Detalles<h3></div></div>";
                 html+="<div class='row'><div class='col-sm-12'>"+de+"</div></div>";
             html+="</div>";
-            html+="<div class='row'><div class='col-sm-12'><h3>Informaci&oactuen adicional<h3></div></div>";
+            html+="<div class='row'><div class='col-sm-12'><h3>Información adicional<h3></div></div>";
                 html+="<div class='row'><div class='col-sm-12'>"+ay+"</div></div>";
             html+="<div class='row'><div class='col-sm-12'><h3>Definiciones<h3></div></div>";
             html+="<div class='row'><div class='col-sm-12'>"+def+"</div></div>";
@@ -448,6 +481,52 @@ function wordsInvalid(text){
     }
 
 }
+function save(name,cuestionario,cantidadErrores,isValid){
+   
+            cuestionario.imagenSeccion=name;
+            cuestionario.seccion = $("#seccion").val();
+            console.log(cuestionario);
+            if(cantidadErrores==0){
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                  $.ajax({
+                    type:'POST',
+                    url:'../cuestionarios/store',
+                    data:{cuestionario:cuestionario},
+                    success:function(data){
+                        console.log(data);
+                        let json = JSON.parse(data);
+                        if(json){
+                            let rsp=alertTimeCorrect("Cuestionario creado exitosamente",function(response){
+                               // limpiarFormulario();
+                               localStorage.setItem('preguntas','[]');
+                               localStorage.setItem('cuestionario','{}');
+                               window.location ="../cuestionarios/create";
+                              });
+                        }else{
+                            alertError("Error inesperado al guardar el cuestionario");
+                        }
+                
+                    },
+                    error:function(data){
+                        console.log(data);
+                        alertError("Error inesperado en el servidor");
+                    }
+                
+                 });
+                localStorage.setItem('cuestionario',JSON.stringify(cuestionario));
+                console.log(cuestionario);
+            }else{
+                if(isValid){
+                    alertError("Hay campos del formulario a corregir, por favor revisa y vuelve a intentarlo.");
+                    setTimeout(function(){  desplaceTop(); }, 2500);
+                   
+                }
+            }
+}
 $("#save").click(function(){
     confirmacionEliminar("¿Desea Crear el formulario?", function(response) {
         if(response) {
@@ -471,14 +550,15 @@ $("#save").click(function(){
             cuestionario.genero=$("#genero").val();
             cuestionario.trabajo=$("#trabajo").val();
             cuestionario.hijos=$("#hijos").val();
-            cuestionario.imagen=$("#img").val();
-        
+            cuestionario.imagen = $("#img").val();
+           
+            cuestionario.seccion = $("#seccion").val();
             cuestionario.antecedentesPersonales=sceditor.instance(antecedentesPersonales).val();
             cuestionario.antecedentesFamiliares=sceditor.instance(antecedentesFamiliares).val();
             cuestionario.motivo=sceditor.instance(motivo).val();
             cuestionario.revision=sceditor.instance(revision).val();
 
-            
+            console.log(cuestionario);
             cuestionario.fecha = new Date();
             
             let titulo = $('#titulo').val();
@@ -673,39 +753,8 @@ $("#save").click(function(){
                 $('#motivoSpan').text("");
             }
             valid=false;
-
             if(cantidadErrores==0){
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                  $.ajax({
-                    type:'POST',
-                    url:'../cuestionarios/store',
-                    data:{cuestionario:cuestionario},
-                    success:function(data){
-                        console.log(data);
-                        let json = JSON.parse(data);
-                        if(json){
-                            let rsp=alertTimeCorrect("Cuestionario creado exitosamente",function(response){
-                               // limpiarFormulario();
-                               localStorage.setItem('preguntas','[]');
-                               localStorage.setItem('cuestionario','{}');
-                              });
-                        }else{
-                            alertError("Error inesperado al guardar el cuestionario");
-                        }
-                
-                    },
-                    error:function(data){
-                        console.log(data);
-                        alertError("Error inesperado en el servidor");
-                    }
-                
-                 });
-                localStorage.setItem('cuestionario',JSON.stringify(cuestionario));
-                console.log(cuestionario);
+                uploadImage(cuestionario,cantidadErrores,isValid);
             }else{
                 if(isValid){
                     alertError("Hay campos del formulario a corregir, por favor revisa y vuelve a intentarlo.");
@@ -713,6 +762,7 @@ $("#save").click(function(){
                    
                 }
             }
+           
             
         }
       });

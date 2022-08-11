@@ -28,7 +28,7 @@ class LoginController extends Controller
         }else{
             $_SESSION["errorBD"] = "";
             $_SESSION['id'] = $usuario->idUsuario;
-            return redirect()->to('./casos_estudio');
+            return redirect()->to('./cuestionarios');
         }
         
        

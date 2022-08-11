@@ -69,7 +69,13 @@
                         </td>
                         <td style="width:125px;" >
                             <div class="d-flex justify-content-center align-items-center" style="height: 55px">
-                                
+                                <form action='{{route("cuestionarios.show", [$nivel])}}' method="post" >
+                                    @method("get")
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary text-white" style="margin-left:5px;width:25px;height:29px;" titel="SALA">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </form>
                                     <button type="submit" class="btn btn-warning text-white" style="margin-left:5px;width:25px;height:29px;" data-toggle="modal" data-target="#myModal" onclick="changeStatus('{{$nivel->codigo}}','{{$nivel->disponible}}','{{$nivel->titulo}}')">
                                         <i class="fa fa-edit"></i>
                                     </button>

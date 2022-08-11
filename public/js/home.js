@@ -212,7 +212,7 @@ var particles
 		particles.resize();
 	}
 }());
-
+/*
 // Pass in the id of an element
 let confetti = new Confetti('demo');
 
@@ -221,7 +221,7 @@ confetti.setCount(75);
 confetti.setSize(1);
 confetti.setPower(25);
 confetti.setFade(false);
-confetti.destroyTarget(false);
+confetti.destroyTarget(false);*/
 
 setTimeout(() => {
 	$(".spin").css('display','none');

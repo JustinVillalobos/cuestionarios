@@ -29,6 +29,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $genero
  * @property string|null $trabajo
  * @property int|null $hijos
+ * @property string|null $imagenSeccion
+ * @property int|null $seccion
  * 
  * @property Usuario $usuario
  * @property Collection|Pregunta[] $preguntas
@@ -47,7 +49,8 @@ class Cuestionario extends Model
 		'autor' => 'int',
 		'edad' => 'int',
 		'genero' => 'int',
-		'hijos' => 'int'
+		'hijos' => 'int',
+		'seccion' => 'int'
 	];
 
 	protected $dates = [
@@ -69,7 +72,9 @@ class Cuestionario extends Model
 		'imagen',
 		'genero',
 		'trabajo',
-		'hijos'
+		'hijos',
+		'imagenSeccion',
+		'seccion'
 	];
 
 	public function usuario()
