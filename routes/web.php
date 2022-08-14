@@ -28,6 +28,10 @@ Route::post('cuestionarios/destroy',[CuestionariosController::class, 'destroy'])
 Route::post('cuestionarios/imagen',[CuestionariosController::class, 'imagen'])->name('cuestionarios.imagen');
 Route::get('caso_estudio',[CuestionariosController::class, 'caso_estudio'])->name('cuestionarios.caso_estudio');
 
+Route::post('insertUser',[CuestionariosController::class, 'insertUser'])->name('cuestionarios.insertUser');
+Route::post('updatePuntaje',[CuestionariosController::class, 'updatePuntaje'])->name('cuestionarios.updatePuntaje');
+Route::post('sala',[CuestionariosController::class, 'sala'])->name('cuestionarios.sala');
+
 Route::post('live',[CuestionariosController::class, 'ajaxFetch'])->name('cuestionarios.ajaxFetch');
 
 Route::resource('usuarios',UsuariosController::class);
@@ -39,6 +43,7 @@ Route::get('perfil',[UsuariosController::class, 'perfil'])->name('usuarios.perfi
 
 
 Route::get('inicio_sesion',[LoginController::class, 'index'])->name('login.index');
+Route::get('logout',[LoginController::class, 'logout'])->name('login.logout');
 
 Route::post('loginValidator',[LoginController::class, 'loginValidator'])->name('login.loginValidator');
 

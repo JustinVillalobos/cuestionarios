@@ -83,7 +83,7 @@
     </div>
     <div class="col-sm-6 d-flex justify-content-center align-items-center">
         <div class="col-sm-12 d-flex justify-content-center align-items-center">
-                        <img src="../assets/avatars/avatar1.png" id='profile' style="width:255px;"/>
+                        <img src="{{ URL::asset('assets/avatars/avatar1.png');}}" id='profile' style="width:255px;"/>
         </div>
     </div>
     <div class="col-sm-12" style="padding:10px 20px 0px 20px;">

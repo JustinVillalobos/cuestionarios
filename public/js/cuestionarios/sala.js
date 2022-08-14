@@ -1,5 +1,8 @@
 let estado=false;
 var intervalId=null;
+$( document ).ready(function() {
+    $(".spin").css('display','none');
+});
 function stop(){
     clearInterval(intervalId);
     console.log("TERMIAN");

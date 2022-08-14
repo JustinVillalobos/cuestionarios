@@ -44,6 +44,8 @@
     </div>
 </div>
 </div>
+<?php $route2 = route("usuarios.index");?>
+<input type="hidden" value="{{$route2}}" id="route" />
 <script src="{{ URL::asset('js/usuarios/perfil.js'); }}"></script>        
 @stop
  

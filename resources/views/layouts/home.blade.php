@@ -59,9 +59,9 @@ body {
     <body class="antialiased">
         
         <div class="flex-container body" style="padding: 0px;">
-           <div class="row">
+           <div class="row" style="    width: 100%;">
                 
-                <div class="col-sm-12">
+                <div class="col-sm-12" style="    padding: 0px;">
                     @section('content')
                 
                     @show

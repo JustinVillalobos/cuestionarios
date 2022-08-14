@@ -1,6 +1,10 @@
+$( document ).ready(function() {
+  $(".spin").css('display','none');
+});
 function validate(e,form,id){
     confirmacionEliminar("¿Desea eliminar el registro?", function(response) {
         if(response) {
+          $(".spin").css('display','block');
            // form.submit();
            // return true;
            $.ajaxSetup({
@@ -10,13 +14,14 @@ function validate(e,form,id){
         });
           $.ajax({
             type:'POST',
-            url:'./usuarios/destroy',
+            url:$("#route").val()+'/destroy',
             data:{id:id},
             success:function(data){
                 console.log(data,id);
+                $(".spin").css('display','none');
               if(data=='true'){
                 let rsp=alertTimeCorrect("Usuario eliminado exitosamente",function(response){
-                    window.location="../usuarios";
+                    window.location=$("#route").val();
                   });
               }else{
                 alertError("Error al eliminar Usuario");

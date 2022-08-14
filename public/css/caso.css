@@ -1,10 +1,44 @@
 .swiper {
-    width: 95%;
-    height: 90vh;
+    width: 100%;
+    height: 85vh;
    
   }
+  .modal{
+    background: rgba(0,0,0,0.9)!important;
+   
+  }
+  .modal-title{
+    font-size: 24px;
+    font-weight: bold;
+  }
+  .modal .btn-modal{
+    font-size: 24px;
+    width:125px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal .modal-dialog{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    max-width: 100%;
+  }
+  .modal .modal-dialog .modal-content{
+
+    width: 100%;
+    height: 75vh;
+  }
+  #visor .modal-dialog .modal-content{
+    height: auto!important;
+  }
+  .swiper img{
+    cursor: pointer;
+  }
   .swiper-slide{
-      
+    overflow-x: hidden;
   }
   .swiper-bg{
       width: 100%;
@@ -17,7 +51,12 @@
   }
   .swip{
     width: 100%;
-      height: 90vh;
+      height: 85vh;
+      overflow-y: auto;
+  }
+  .div-row-slid-init{
+    margin-top:5%;
+    width: 100%;    
   }
   .moreInfoTitle label{
     font-size: 18px;
@@ -25,4 +64,278 @@
   .moreInfo label, .moreInfo{
     font-size: 16px;
     height: 25px;
+  }
+  .btn-hecho{
+    width:85%;
+    height: 75px;
+    font-size: 17px;
+    position: absolute;
+    text-transform: uppercase;
+  }
+  .div-icon{
+    width: 100%;
+    margin-top: -16px;
+    margin-left: 11px;
+    text-align: end;
+    display: none;
+  }
+  .icon-check{
+    position: relative;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .subtitle{
+    font-size: 20px;
+    font-weight: bold;
+  }
+  #title{
+    font-size: 22px;
+    text-transform: uppercase;
+  }
+  .pregunta{
+    font-size: 22px;
+    text-transform: uppercase;
+  }
+  .pregunta span{
+    border-bottom: 4px solid;
+  }
+  .preguntaText{
+    font-size: 26px;
+    font-weight: bold;
+  }
+  .response{
+    width:85%;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+
+  }
+  .number-response{
+    font-size: 16px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:white;
+  }
+  .text-response{
+    font-size: 16px;
+    text-align: center;
+    border:1px solid #8e9398;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left:10px;
+    -webkit-box-shadow: 0px 7px 7px 0px #8e9398; 
+    box-shadow: 0px 7px 7px 0px #8e9398;
+  }
+  .btn-response{
+    width:220px;
+    height: 55px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    justify-content: center;
+  }
+  .btn-informacion{
+    text-transform: uppercase;
+    font-size: 20px!important;
+  }
+  .response:hover .text-response{
+    background-color: #007bff!important;
+    color:white;
+    cursor: pointer;
+  }
+  .swal2-container{
+    z-index: 100000000;
+  }
+  .swal2-popup{
+
+    width: 40%;
+    height: 45vh;
+    font-size: 13px;
+  }
+  .bodyData{
+    font-size: 18px;
+  }
+ .body-slide{
+  overflow-y: auto;
+ }
+ .definiciones{
+  font-size: 16px;
+ }
+ .ayuda{
+  font-size: 20px;
+ }
+ .div-det {
+  font-size: 20px;
+ }
+ .final{
+  font-size: 20px;
+ }
+ .control{
+  pointer-events: none;
+  cursor: pointer;
+  
+  font-size: 22px;
+  position: relative;
+  margin-top: -15px;
+    margin-right: 15px;
+ }
+ .control2{
+  cursor: pointer;
+  font-size: 22px;
+  position: relative;
+  margin-top: -15px;
+    margin-right: 35px;
+ }
+ .control2 .dropdown-menu{
+  left: -100px!important;
+ }
+ .left-control{
+  margin-right:55px;
+ }
+
+ .spinnerDiv {
+          -webkit-animation:2 rotate2 2s linear infinite;
+          animation:2 rotate2 2s linear infinite;
+          left: -84%;
+          top: -20%;
+          height: 50px;
+          position: absolute;
+          display: none;
+}
+.spinnerDiv .path {
+          stroke: #93bfec;
+          stroke-linecap: round;
+          -webkit-animation: dash2 1.5s ease-in-out infinite;
+          animation: dash2 1.5s ease-in-out infinite;
+}
+.card-custom{
+  width:113px;
+  height: 113px;
+  padding: 5px 5px 5px 5px;
+  border: 1px solid #989595;
+  text-align: center;
+  align-items: end;
+  display: flex;
+}
+.card-custom label{
+    z-index: 3;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    color: white;
+}
+#slideFinal{
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.card-custom .icon-card-correct,.card-custom .icon-card-incorrect{
+  border-radius: 50%;
+  height: 100px;
+  color: white;
+  display: flex;
+  justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    position: absolute;
+    width: 100px;
+ 
+}
+@-webkit-keyframes rotate2 {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate2 {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes dash2 {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
+@keyframes dash2 {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
+
+  /*  Imagen perfil, margin bodyData */
+
+  @media screen and (max-width: 750px) {
+    .body{
+      width:100%;
+    }
+    #case{
+      width: 100%;
+    }
+    .div-row-slid-init{
+      height: 550px;
+    }
+    .swip{
+      overflow-x: hidden;
+      padding-bottom: 25px;
+    }
+    .swiper-fe{
+      display: flex;
+    justify-content: center;
+    }
+    .div-row-slid-init .col-sm-3{
+      display: flex;
+    justify-content: center;
+    }
+    .response{
+      width: 100%;
+    }
+    .response .col-sm-1{
+      width:10%;
+    }
+    .response .col-sm-10{
+      width:80%;
+    }
+    .btn-response{
+      margin-top:15%;
+    }
+    .btn-informacion{
+      width: 100%!important;
+    }
+    .modal .modal-dialog{
+      width: 100%;
+    }
+    .swal2-popup{
+
+      width: 90%;
+
+      font-size: 13px;
+    }
+    .details-div{
+      display: flex;
+      justify-content: center;
+    }
   }

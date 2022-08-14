@@ -26,6 +26,21 @@ function copyCode(codigo){
         console.log('Something went wrong', err);
     });
 }
+function copyQR(link){
+    const $imagen = document.querySelector("#codigo");
+		new QRious({
+			element: $imagen,
+			value: link, // La URL o el texto
+			size: 500,
+			backgroundAlpha: 0, // 0 para fondo transparente
+			foreground: "#000", // Color del QR
+			level: "H", // Puede ser L,M,Q y H (L es el de menor nivel, H el mayor)
+		});
+		const enlace = document.createElement("a");
+			enlace.href = $imagen.src;
+			enlace.download = "code.png";
+			enlace.click();
+}
 function copyLink(codigo){
     navigator.clipboard.writeText(codigo)
     .then(() => {
@@ -73,14 +88,14 @@ function updateState(){
             });
               $.ajax({
                 type:'POST',
-                url:'../cuestionarios/update',
+                url:'./cuestionarios/update',
                 data:{codigo:codigo,disponible:disponible},
                 success:function(data){
                     console.log(data);
                     let json = JSON.parse(data);
                     if(json){
                         let rsp=alertTimeCorrect("Caso de estudio actualizado exitosamente",function(response){
-                           window.location="../cuestionarios";
+                           window.location=$("#route").val();
                           });
                     }else{
                         alertError("Error inesperado al actualizar el estado del caso de estudio");
@@ -113,7 +128,7 @@ function validate(e,form,id){
                 console.log(data,id);
               if(data=='true'){
                 let rsp=alertTimeCorrect("Caso de estudio eliminado exitosamente",function(response){
-                    window.location="../cuestionarios";
+                    window.location=$("#route").val();
                   });
               }else{
                 alertError("Error al eliminar el caso de estudio");
@@ -130,3 +145,6 @@ function validate(e,form,id){
       });
       return false;
 }
+$( document ).ready(function() {
+    $(".spin").css('display','none');
+});

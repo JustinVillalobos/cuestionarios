@@ -7,6 +7,21 @@ use App\Models\Usuario;
 session_start();
 class UsuariosController extends Controller
 {
+    public function __construct(){
+        $uri = request()->route()->uri;
+        if(empty($_SESSION['id']) && $uri!="caso_estudio" && $uri!="insertUser" && $uri!="updatePuntaje" && $uri!="sala"){
+            return redirect('inicio_sesion')->send();
+        }else{
+            
+            if(!empty($_SESSION['id'])){
+                
+                if($_SESSION['id']==""  && $uri!="caso_estudio" && $uri!="insertUser" && $uri!="updatePuntaje" && $uri!="sala"){
+                   
+                    return redirect('inicio_sesion')->send();
+                }
+            }
+        }
+    }
     /**
      * Display a listing of the resource.
      *

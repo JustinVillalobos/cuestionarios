@@ -1,3 +1,6 @@
+$( document ).ready(function() {
+    $(".spin").css('display','none');
+});
 function  stringLength(value,max){
     if(value.length<=max){
         return true;
@@ -62,6 +65,7 @@ function save(){
     }
     valid=false;
     if(cantidadErrores==0){
+        $(".spin").css('display','block');
         let form = {};
         form.usuario=nombre;
         form.pass=pass;
@@ -77,9 +81,10 @@ function save(){
             url:'../../usuarios/update',
             data:{usuario:form},
             success:function(data){
+                $(".spin").css('display','none');
                 let json = JSON.parse(data);
                 if(json){
-                    let rsp=alertTimeCorrect("Usuario Registrado exitosamente",function(response){
+                    let rsp=alertTimeCorrect("Usuario actualizado exitosamente",function(response){
                         limpiarFormulario();
                       });
                 }else{

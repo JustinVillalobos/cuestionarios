@@ -41,7 +41,9 @@ function format (option) {
     return ob;
 };
 
-
+$( document ).ready(function() {
+    $(".spin").css('display','none');
+});
 $( document ).ready(function() {
     $("#img").select2({
         placeholder: "Select something!!",
@@ -101,6 +103,7 @@ let indicePregunta=1;
 let preguntas=[];
 let html="";
 function uploadImage(cuestionario,cantidadErrores,isValid){
+    $(".spin").css('display','block');
     var $avatarImage,$avatarInput,$avatarForm;
     $avatarInput = $("#file");
     $avatarForm = $("#form");
@@ -373,8 +376,8 @@ $("#addPregunta").click(function(){
         errores+="Campo detalles no puede estar vacío<br>";
         count++;
     }
-    if(detall.length>=300){
-        errores+="Los detalles de la pregunta no puede exceder los 300 caracteres";
+    if(detall.length>=10000){
+        errores+="Los detalles de la pregunta no puede exceder los 700 caracteres";
         count++;
     }
     if(wordsInvalid(detall) ){
@@ -385,8 +388,8 @@ $("#addPregunta").click(function(){
         errores+="Campo ayuda no puede estar vacío<br>";
         count++;
     }
-    if(ayud.length>=300){
-        errores+="Los datos de ayuda de la pregunta no puede exceder los 300 caracteres";
+    if(ayud.length>=10000){
+        errores+="Los datos de ayuda de la pregunta no puede exceder los 700 caracteres";
         count++;
     }
     if(wordsInvalid(def) ){
@@ -394,8 +397,8 @@ $("#addPregunta").click(function(){
         count++;
     }
 
-    if(def.length>=300){
-        errores+="Los datos de definiciones de la pregunta no puede exceder los 300 caracteres";
+    if(def.length>=10000){
+        errores+="Los datos de definiciones de la pregunta no puede exceder los 700 caracteres";
         count++;
     }
     if(wordsInvalid(def) ){
@@ -423,6 +426,7 @@ $("#addPregunta").click(function(){
    
     sceditor.instance(detalles).val('<p><br></p>');
     sceditor.instance(ayuda).val('<p><br></p>');
+    sceditor.instance(definiciones).val('<p><br></p>');
 });
 function desplaceTop(){
     $("html, body,.contenedor").animate({ scrollTop: 0 }, "fast");
@@ -500,6 +504,7 @@ function save(name,cuestionario,cantidadErrores,isValid){
                         console.log(data);
                         let json = JSON.parse(data);
                         if(json){
+                            $(".spin").css('display','none');
                             let rsp=alertTimeCorrect("Cuestionario creado exitosamente",function(response){
                                // limpiarFormulario();
                                localStorage.setItem('preguntas','[]');
@@ -591,7 +596,7 @@ $("#save").click(function(){
             valid=false;
 
             let des = $('#des').val();
-            if(!stringLength(des,200)){
+            if(!stringLength(des,10000)){
                 $('#des + span').text("**Demasiados caracteres");
                 cantidadErrores++;
                 valid=true;
@@ -671,7 +676,7 @@ $("#save").click(function(){
 
             /***************************************** */
             let ap = cuestionario.antecedentesPersonales;
-            if(!stringLength(ap,500)){
+            if(!stringLength(ap,10000)){
                 $('#antecedentePersonalSpan').text("**Demasiados caracteres");
                 cantidadErrores++;
                 valid=true;
@@ -692,7 +697,7 @@ $("#save").click(function(){
             valid=false;
 
             let af = cuestionario.antecedentesFamiliares;
-            if(!stringLength(af,500)){
+            if(!stringLength(af,10000)){
                 $('#antecedentesFamiliaresSpan').text("**Demasiados caracteres");
                 cantidadErrores++;
                 valid=true;
@@ -713,7 +718,7 @@ $("#save").click(function(){
             valid=false;
 
             let r = cuestionario.revision;
-            if(!stringLength(r,500)){
+            if(!stringLength(r,10000)){
                 $('#revisionSpan').text("**Demasiados caracteres");
                 cantidadErrores++;
                 valid=true;
@@ -734,7 +739,7 @@ $("#save").click(function(){
             valid=false;
 
             let m = cuestionario.motivo;
-            if(!stringLength(m,500)){
+            if(!stringLength(m,10000)){
                 $('#motivoSpan').text("**Demasiados caracteres");
                 cantidadErrores++;
                 valid=true;

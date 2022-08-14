@@ -225,4 +225,4 @@ confetti.destroyTarget(false);*/
 
 setTimeout(() => {
 	$(".spin").css('display','none');
-}, 3500);
+}, 2000);

@@ -14,7 +14,7 @@
 </div>
 <div class="row" style="margin-top:15px;padding-left:5px;">
     <div class="col-sm-6" style="padding-left:15px;">
-        <a href="/usuarios/create" class="btn btn-primary" style="margin-left:5px;height:35px;">
+        <a href='{{route("usuarios.create")}}' class="btn btn-primary" style="margin-left:5px;height:35px;">
                 <i class="fa fa-plus"></i> Agregar Usuario
         </a>
     </div>
@@ -35,7 +35,7 @@
             </button>
                                         
         </form>
-        <a href="/usuarios" class="btn btn-primary" style="margin-left:5px">
+        <a href="./usuarios" class="btn btn-primary" style="margin-left:5px">
             <i class="fa fa-refresh"></i>
         </a>
     </div>
@@ -81,7 +81,8 @@
     </div>
 </div>
 </div>
-
+<?php $route2 = route("usuarios.index");?>
+<input type="hidden" value="{{$route2}}" id="route" />
 <script src="{{ URL::asset('js/usuarios/list.js'); }}"></script>       
 @stop
  

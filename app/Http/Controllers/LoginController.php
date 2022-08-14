@@ -33,4 +33,8 @@ class LoginController extends Controller
         
        
     }
+    public function logout(){
+        $_SESSION['id'] = "";
+        return redirect()->to('inicio_sesion');
+    }
 }

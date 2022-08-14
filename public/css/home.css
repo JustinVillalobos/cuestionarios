@@ -19,7 +19,7 @@ html, body{
   position: absolute; 
   top: 0px;
   left: 0px;
-  width:100%;
+  width:104%;
   height:100%;
 } 
 .body{
@@ -141,4 +141,8 @@ html, body{
 .btn-three:hover::after {
   opacity: 1;
   transform: scale(1,1);
+}
+.text-error{
+  font-size: 20px;
+    font-weight: bold;
 }

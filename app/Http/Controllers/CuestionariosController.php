@@ -11,6 +11,21 @@ use App\Models\Puntaje;
 session_start();
 class CuestionariosController extends Controller
 {
+    public function __construct(){
+        $uri = request()->route()->uri;
+        if(empty($_SESSION['id']) && $uri!="caso_estudio" && $uri!="insertUser" && $uri!="updatePuntaje" && $uri!="sala"){
+            return redirect('inicio_sesion')->send();
+        }else{
+            
+            if(!empty($_SESSION['id'])){
+                
+                if($_SESSION['id']==""  && $uri!="caso_estudio" && $uri!="insertUser" && $uri!="updatePuntaje" && $uri!="sala"){
+                   
+                    return redirect('inicio_sesion')->send();
+                }
+            }
+        }
+    }
     /**
      * Display a listing of the resource.
      *
@@ -41,6 +56,9 @@ class CuestionariosController extends Controller
                 $input['limit'] = $_SESSION['limit'];         
         }
         if(is_null($input['search'])){
+            if(empty($_SESSION['search'])){
+                $_SESSION['search'] ="";
+            }
             $input['search'] =$_SESSION['search'];
            
         }else{
@@ -88,11 +106,79 @@ class CuestionariosController extends Controller
     {
         //
         $input = $request->all();
-        $cuestionario= Cuestionario::where("codigo",'=',$input['codigo'])->first();
+        $cuestionario= Cuestionario::where("codigo",'=',$input['code'])->first();
+        if(empty($cuestionario)){
+            return redirect()->to('./');
+        }
+        $preguntas=Pregunta::where('preguntas.idCuestionario','=',$cuestionario->idCuestionario)->get();
+        $randomName = $this->generarCadenaAleatoria(75);
         $data = [
-            'cuestionario'=>$cuestionario
+            'cuestionario'=>$cuestionario,
+            'preguntas'=>$preguntas,
+            'randomCodigo'=>$randomName
         ];
         return view('cuestionarios.caso_estudio',$data);
+    }
+    public function sala(Request $request){
+        $input = $request->all();
+        $cuestionario= Cuestionario::where("codigo",'=',$input['code'])->first();
+        if(empty($cuestionario)){
+            $data = [
+                'errors'=>"Caso de Estudio no encontrado"
+            ];
+            return view("home.index",$data);
+        }else{
+            return redirect()->to('./caso_estudio?code='.$input['code']);
+        }
+    }
+    public function insertUser(Request $request){
+        $input = $request->all();
+        $data = $input['puntaje'];
+        $puntajeSearch= Puntaje::where('nombre','=',$input['puntaje']['usuario']);
+        $puntajeSearch=$puntajeSearch->first();
+        if(!empty($puntajeSearch)){
+            $fecha = date_create($puntajeSearch->fechaCreacion);
+            $fecha2 = date("Y-m-d");
+            if($fecha->format('Y-m-d') == $fecha2){
+                echo json_encode(false);
+                return;
+            }
+        }
+        
+        $cuestionario= Cuestionario::where("codigo",'=',$data['idCuestionario'])->first();
+        $puntaje = new Puntaje([
+            'codigo'=>$data['codigo'],
+            'nombre'=>$data['usuario'],
+            'fechaCreacion'=>date('Y-m-d H:i:s'),
+            'puntajeCorrecto'=>0,
+            'puntajeIncorrecto'=>0,
+            'idCuestionario'=>$cuestionario->idCuestionario
+        ]);
+        try{
+            $puntaje->save();
+            echo json_encode(true);
+        }catch(\Illuminate\Database\QueryException $e){
+            echo json_encode($e);
+        }
+    }
+    public function updatePuntaje(Request $request){
+        $input = $request->all();
+        $puntaje= Puntaje::where('codigo','=',$input['puntaje']['codigo'])->first();
+        $correcto = $puntaje->puntajeCorrecto;
+        $incorrecto = $puntaje->puntajeIncorrecto;
+        var_dump($input['puntaje']['isCorrecto']);
+        if($input['puntaje']['isCorrecto']=='true'){
+            var_dump("Ingreso");
+            $puntaje->puntajeCorrecto = $correcto+1;
+        }else{
+            $puntaje->puntajeIncorrecto = $incorrecto+1;
+        }
+        try{
+            $puntaje->save();
+            echo json_encode(true);
+        }catch(\Illuminate\Database\QueryException $e){
+            echo json_encode($e);
+        }
     }
     public function imagen(Request $request){
         
@@ -223,9 +309,11 @@ class CuestionariosController extends Controller
         $cuestionario= Cuestionario::where("idCuestionario",'=',$input['idSala'])->first();
         $puntajes =Puntaje::select('puntajes.*')->where('idCuestionario','=',$input['idSala']);
         if($salaData=="1"){
-            $puntajes->where('fechaCreacion','=',date('y-m-d'));
+            $d = (new \DateTime('2014-07-10'))->modify('-1 day')->format('Y-m-d');
+            $puntajes->whereDate('fechaCreacion','>=',$d);
+            
         }
-        
+        $puntajes->orderBy('puntajeCorrecto', 'desc');
         $puntajes =$puntajes->paginate($limit);
         $preguntas = Pregunta::where("idCuestionario",'=',$input['idSala'])->get();
         $cantidad = count($preguntas);
