@@ -142,10 +142,10 @@
             <div class="col-sm-10 form-inline text-end" style="padding-left:0px;">
                     <select class="form-select" id="seccion"  style="width:100%;">
                         <option value="0">Ninguna</option>
-                        <option value="1">M&oacutetivo Consulta</option>
-                        <option value="2">Revisi&oacuten</option>
-                        <option value="3">Antecedentes Familiares</option>
-                        <option value="4">Antecedentes Personales</option>
+                        <option value="3">M&oacutetivo Consulta</option>
+                        <option value="4">Revisi&oacuten</option>
+                        <option value="2">Antecedentes Familiares</option>
+                        <option value="1">Antecedentes Personales</option>
                     </select>
                     <span id="revisionSpan" class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
              </div>

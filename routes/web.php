@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CuestionariosController;
 use App\Http\Controllers\UsuariosController;
-use App\Http\Controllers\homeController;
-Route::get('/',[homeController::class, 'index'])->name('home.index');
+use App\Http\Controllers\HomeController;
+Route::get('/',[HomeController::class, 'index'])->name('home.index');
 
 
 Route::resource('cuestionarios',CuestionariosController::class);
