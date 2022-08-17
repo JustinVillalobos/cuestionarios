@@ -39,7 +39,7 @@
             </button>
                                         
         </form>
-        <a href="../cuestionarios/{{$cuestionario->idCuestionario}}" class="btn btn-primary" style="margin-left:5px">
+        <a href='{{route("cuestionarios.index")}}/{{$cuestionario->idCuestionario}}' class="btn btn-primary" style="margin-left:5px">
             <i class="fa fa-refresh"></i>
         </a>
         <button id="button" class="btn btn-info text-white" style="margin-left:5px">
@@ -56,6 +56,8 @@
    </div>
 </div>
 </div>
+<?php $route2 = route("cuestionarios.index");?>
+<input type="hidden" value="{{$route2}}" id="route" />
 <script src="{{ URL::asset('js/cuestionarios/sala.js'); }}"></script>        
 @stop
  

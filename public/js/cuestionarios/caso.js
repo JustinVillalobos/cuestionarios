@@ -115,11 +115,22 @@ function setCards(preguntas){
             if(it<9){
                 index="0"+it;
             }
-                if(element.isCorrecto){
-                    dom+="<div class='icon-card-correct bg-success'><i class='fa fa-check'></i></div>";
-                }else{
-                    dom+="<div class='icon-card-incorrect bg-danger'><i class='fa fa-times'></i></div>";
-                }
+            let resp="A";
+            switch(element.respuesta){
+                case 0:
+                    resp="A";
+                    break;
+                case 1:
+                    resp="B";
+                    break;
+                case 2:
+                    resp="C";
+                    break;
+                case 3:
+                    resp="D";
+                    break;
+            }
+                dom+="<div class='icon-card-correct bg-primary'>"+resp+"</div>";
                 dom+="<label>"+index+"</label>";
             dom+="</div>";
         dom+="</div>";
@@ -201,14 +212,15 @@ function responseQuestion(pregunta,solucion){
         console.log(element);
         element.play();
          p ={pregunta:pregunta,respuesta:respuesta,isCorrecto:true,codigo: localStorage.getItem('codigo')};
-        let rsp=alertTimeCorrect("Respuesta Correcta",function(response){
+        let rsp=alertTimeCorrect("¡Muchas gracias!<br> Respuesta recibida",function(response){
            });
         preguntas.push(p);
     }else{
-        let element = document.getElementById("incorrect");
+        let element = document.getElementById("correct");
         element.volume = document.getElementById("mislider").value;
         element.play();
-        alertError("Respuesta Incorrecta");
+        let rsp=alertTimeCorrect("¡Muchas gracias!<br> Respuesta recibida",function(response){
+        });
         p ={pregunta:pregunta,respuesta:respuesta,isCorrecto:false,codigo: localStorage.getItem('codigo')};
         preguntas.push(p);
     }
@@ -315,6 +327,10 @@ $( document ).ready(function() {
 
 });
 function reinitSala(){
+    localStorage.setItem('codigo','');
+    localStorage.setItem('usuario','');
+    localStorage.setItem('idCuestionario',$("#idCuestionario").val());
+    localStorage.setItem('preguntasContestadas','[]');
     window.location ="./caso_estudio?code="+$("#idCuestionario").val();
 }
 

@@ -110,6 +110,9 @@ class CuestionariosController extends Controller
         if(empty($cuestionario)){
             return redirect()->to('./');
         }
+        if($cuestionario->disponible != 1){
+            return redirect()->to('./');
+        }
         $preguntas=Pregunta::where('preguntas.idCuestionario','=',$cuestionario->idCuestionario)->get();
         $randomName = $this->generarCadenaAleatoria(75);
         $data = [
@@ -128,7 +131,15 @@ class CuestionariosController extends Controller
             ];
             return view("home.index",$data);
         }else{
-            return redirect()->to('./caso_estudio?code='.$input['code']);
+            if($cuestionario->disponible == 1){
+                return redirect()->to('./caso_estudio?code='.$input['code']);
+            }else{
+                $data = [
+                    'errors'=>"Caso de Estudio no disponible"
+                ]; 
+                return view("home.index",$data);
+            }
+            
         }
     }
     public function insertUser(Request $request){
@@ -309,7 +320,7 @@ class CuestionariosController extends Controller
         $cuestionario= Cuestionario::where("idCuestionario",'=',$input['idSala'])->first();
         $puntajes =Puntaje::select('puntajes.*')->where('idCuestionario','=',$input['idSala']);
         if($salaData=="1"){
-            $d = (new \DateTime('2014-07-10'))->modify('-1 day')->format('Y-m-d');
+            $d = (new \DateTime())->modify('-1 day')->format('Y-m-d');
             $puntajes->whereDate('fechaCreacion','>=',$d);
             
         }
@@ -344,7 +355,7 @@ class CuestionariosController extends Controller
         if($cantidad==0){
             $cantidad=1;
         }
-        $puntajes =Puntaje::select('puntajes.*')->orderBy('puntajeCorrecto', 'desc')->paginate(10);
+        $puntajes =Puntaje::select('puntajes.*')->where('idCuestionario','=',$id)->orderBy('puntajeCorrecto', 'desc')->paginate(10);
         $data = [
             'cuestionario'=>$cuestionario,
             'search'=>"",
@@ -363,7 +374,8 @@ class CuestionariosController extends Controller
         $salaData = $input['salaData'];
         $puntajes =Puntaje::select('puntajes.*')->where('idCuestionario','=',$input['idSala']);
         if($salaData=="1"){
-            $puntajes->where('fechaCreacion','=',date('y-m-d'));
+            $d = (new \DateTime())->modify('-1 day')->format('Y-m-d');
+            $puntajes->whereDate('fechaCreacion','>=',$d);
         }
         $puntajes =$puntajes->orderBy('puntajeCorrecto', 'desc');
         $puntajes =$puntajes->paginate($limit);

@@ -47,7 +47,7 @@ function live(){
         }else{
             $.ajax({
                 type:'POST',
-                url:'../live',
+                url:$("#route").val()+'/../live',
                 data:{idSala:idSala,salaData:salaData,limit:limit},
                 success:function(data){
                     console.log(data);
