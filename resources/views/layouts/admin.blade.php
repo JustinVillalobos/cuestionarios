@@ -4,6 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/jpg" href="{{ URL::asset('assets/logo.png'); }}"/>
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>NetMD</title>
         <meta name="google-translate-customization" content="9f841e7780177523-3214ceb76f765f38-gc38c6fe6f9d06436-c"></meta>

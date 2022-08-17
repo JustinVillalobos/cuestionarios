@@ -7,7 +7,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
         <title>NetMD</title>
         <meta name="google-translate-customization" content="9f841e7780177523-3214ceb76f765f38-gc38c6fe6f9d06436-c"></meta>
-
+        <link rel="icon" type="image/jpg" href="{{ URL::asset('assets/logo.png'); }}"/>
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
