@@ -55,7 +55,16 @@
             <tbody>
                 @foreach($cuestionarios as $nivel)
                     <tr>
-                        <td class="d-flex justify-content-center align-items-center"><img src="{{ URL::asset('assets/avatars/avatar'.$nivel->imagen.'.png'); }}" style="width:55px;height:55px;"/></td>
+
+                        <td class="d-flex justify-content-center align-items-center">
+                            <?php $img=strlen($nivel->imagen);?>
+                                    @if($img < 3)
+                                        <img src="{{ URL::asset('assets/avatars/avatar'.$nivel->imagen.'.png'); }}" style="width:55px;height:55px;"/>
+                                    @endif
+                                    @if($img >= 3)
+                                        <img src="{{ URL::asset($nivel->imagen); }}" style="width:55px;height:55px;"/>
+                                    @endif
+                        </td>
                         <td ><div class="d-flex align-items-center">{{$nivel->titulo}}</div></td>
                         <td ><div class="d-flex justify-content-center align-items-center"><?php echo date_format($nivel->fechaCreacion,"d-m-Y");?></div></td>
                         <td >

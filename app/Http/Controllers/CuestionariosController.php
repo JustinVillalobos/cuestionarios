@@ -7,7 +7,8 @@ use App\Models\Usuario;
 use App\Models\Pregunta;
 use App\Models\Cuestionario;
 use App\Models\Puntaje;
-
+use App\Models\PuntajePreguntum;
+use Illuminate\Support\Facades\DB;
 session_start();
 class CuestionariosController extends Controller
 {
@@ -142,6 +143,51 @@ class CuestionariosController extends Controller
             
         }
     }
+    public function graficos($id)
+    {
+        //
+
+        $cuestionario= Cuestionario::where("idCuestionario",'=',$id)->first();
+        $preguntas = Pregunta::where("idCuestionario",'=',$id)->get();
+        $cantidad = count($preguntas);
+        if($cantidad==0){
+            $cantidad=1;
+        }
+        $puntajes =Puntaje::select('puntajes.*')->where('idCuestionario','=',$id)->orderBy('puntajeCorrecto', 'desc')->paginate(10);
+        $pr=[];
+        for($i=0;$i<count( $preguntas);$i++){
+            $puntajes_preguntas =PuntajePreguntum::select(DB::raw('respuesta, COUNT(respuesta) AS respuesta_count'))
+                                                    ->where('idPregunta','=',$i)
+                                                    ->where('idCuestionario','=',$id)
+                                                    ->groupBy('respuesta')
+                                                    ->get();
+            $cantidadRespuestas=2;
+            if($preguntas[$i]->respuesta3!=""){
+                if($preguntas[$i]->respuesta4!=""){
+                    $cantidadRespuestas=4;
+                }else{
+                    $cantidadRespuestas=3;
+                }
+            }
+            $pr[]=array('respuestas'=>$cantidadRespuestas,'puntajes_preguntas'=>$puntajes_preguntas);
+        }
+        $data = [
+            'cuestionario'=>$cuestionario,
+            'search'=>"",
+            'limit'=>10,
+            'salaData'=>"0",
+            'preguntas'=>$preguntas,
+            'idSala'=>$cuestionario->idCuestionario,
+            'cantidad'=>$cantidad,
+            'puntajes'=>$puntajes,
+            'puntajes_preguntas'=>$pr
+        ];
+       
+        
+        return view("cuestionarios.graficos",$data);
+    }
+
+    
     public function insertUser(Request $request){
         $input = $request->all();
         $data = $input['puntaje'];
@@ -167,6 +213,7 @@ class CuestionariosController extends Controller
         ]);
         try{
             $puntaje->save();
+          
             echo json_encode(true);
         }catch(\Illuminate\Database\QueryException $e){
             echo json_encode($e);
@@ -177,16 +224,75 @@ class CuestionariosController extends Controller
         $puntaje= Puntaje::where('codigo','=',$input['puntaje']['codigo'])->first();
         $correcto = $puntaje->puntajeCorrecto;
         $incorrecto = $puntaje->puntajeIncorrecto;
-        var_dump($input['puntaje']['isCorrecto']);
         if($input['puntaje']['isCorrecto']=='true'){
-            var_dump("Ingreso");
             $puntaje->puntajeCorrecto = $correcto+1;
         }else{
             $puntaje->puntajeIncorrecto = $incorrecto+1;
         }
+
+        $pregunta_puntaje = new PuntajePreguntum([
+            'idPuntajes'=>$puntaje->idPuntaje,
+            'idPregunta'=>$input['puntaje']['pregunta'],
+            'respuesta'=>$input['puntaje']['respuesta'],
+            'idCuestionario'=>$puntaje->idCuestionario
+        ]);
         try{
             $puntaje->save();
-            echo json_encode(true);
+            $pregunta_puntaje->save();
+            $id=$puntaje->idCuestionario;
+            $i =$input['puntaje']['pregunta'];
+            $preguntas = Pregunta::where("idCuestionario",'=',$id)->get();
+            $preguntast[] = $preguntas[$i];
+            $preguntas = $preguntast;
+            $puntajes =Puntaje::select('puntajes.*')->where('idCuestionario','=',$id)->orderBy('puntajeCorrecto', 'desc')->paginate(10);
+            $pr=[];
+            $puntajes_preguntas =PuntajePreguntum::select(DB::raw('respuesta, COUNT(respuesta) AS respuesta_count'))
+                                        ->where('idPregunta','=',$i)
+                                        ->where('idCuestionario','=',$id)
+                                        ->groupBy('respuesta')
+                                        ->get();
+                $cantidadRespuestas=2;
+                if($preguntas[0]->respuesta3!=""){
+                    if($preguntas[0]->respuesta4!=""){
+                        $cantidadRespuestas=4;
+                    }else{
+                        $cantidadRespuestas=3;
+                    }
+                }
+                $pr[]=array('respuestas'=>$cantidadRespuestas,'puntajes_preguntas'=>$puntajes_preguntas);
+                $result = array('res'=>true,'pr'=>$pr,'preguntas'=>$preguntas);
+            echo json_encode($result);
+        }catch(\Illuminate\Database\QueryException $e){
+            echo json_encode($e);
+        }
+    }
+    function refreshData(Request $request){
+        try{
+            $input = $request->all();
+            $puntaje= Puntaje::where('codigo','=',$input['puntaje']['codigo'])->first();
+            $id=$puntaje->idCuestionario;
+            $i =$input['puntaje']['pregunta'];
+            $preguntas = Pregunta::where("idCuestionario",'=',$id)->get();
+            $preguntast[] = $preguntas[$i];
+            $preguntas = $preguntast;
+            $puntajes =Puntaje::select('puntajes.*')->where('idCuestionario','=',$id)->orderBy('puntajeCorrecto', 'desc')->paginate(10);
+            $pr=[];
+            $puntajes_preguntas =PuntajePreguntum::select(DB::raw('respuesta, COUNT(respuesta) AS respuesta_count'))
+                                        ->where('idPregunta','=',$i)
+                                        ->where('idCuestionario','=',$id)
+                                        ->groupBy('respuesta')
+                                        ->get();
+                $cantidadRespuestas=2;
+                if($preguntas[0]->respuesta3!=""){
+                    if($preguntas[0]->respuesta4!=""){
+                        $cantidadRespuestas=4;
+                    }else{
+                        $cantidadRespuestas=3;
+                    }
+                }
+                $pr[]=array('respuestas'=>$cantidadRespuestas,'puntajes_preguntas'=>$puntajes_preguntas);
+                $result = array('res'=>true,'pr'=>$pr,'preguntas'=>$preguntas);
+            echo json_encode($result);
         }catch(\Illuminate\Database\QueryException $e){
             echo json_encode($e);
         }
@@ -225,7 +331,22 @@ class CuestionariosController extends Controller
     {
         //
         $input = $request->all();
-        $datos= $input['cuestionario'];
+        $datos= json_decode($input['cuestionario'],true);
+        $imagen = $request->file('imagen');
+        if(empty($imagen)){
+            return "No hay";
+        }
+        $extension = $imagen->getClientOriginalExtension();
+        $randomName = $this->generarCadenaAleatoria(15);
+        $filename= "Img ".$randomName.".".$extension;
+        
+        $public_path = public_path('assets/avatars');
+        while(file_exists($public_path."/".$filename)){
+            $filename= "Img ".$randomName.".".$extension;
+        }
+        $path = 'assets/avatars/'.$filename;
+        $imagen->move($public_path,$filename);
+        $datos['imagen']=$path;
         $code = $this->generarCadenaAleatoria(24);
         $codeSearch=true;
         while($codeSearch){
@@ -365,7 +486,39 @@ class CuestionariosController extends Controller
             'cantidad'=>$cantidad,
             'puntajes'=>$puntajes
         ];
+        $percentajes=[];
+        
         return view("cuestionarios.sala",$data);
+    }
+    
+    public function ajaxFetchG(Request $request){
+        $input =   $request->all(); 
+        $id = $input['idSala'];
+        $cuestionario= Cuestionario::where("idCuestionario",'=',$id)->first();
+        $preguntas = Pregunta::where("idCuestionario",'=',$id)->get();
+        $cantidad = count($preguntas);
+        if($cantidad==0){
+            $cantidad=1;
+        }
+        $puntajes =Puntaje::select('puntajes.*')->where('idCuestionario','=',$id)->orderBy('puntajeCorrecto', 'desc')->paginate(10);
+        $pr=[];
+        for($i=0;$i<count( $preguntas);$i++){
+            $puntajes_preguntas =PuntajePreguntum::select(DB::raw('respuesta, COUNT(respuesta) AS respuesta_count'))
+                                                    ->where('idPregunta','=',$i)
+                                                    ->where('idCuestionario','=',$id)
+                                                    ->groupBy('respuesta')
+                                                    ->get();
+            $cantidadRespuestas=2;
+            if($preguntas[$i]->respuesta3!=""){
+                if($preguntas[$i]->respuesta4!=""){
+                    $cantidadRespuestas=4;
+                }else{
+                    $cantidadRespuestas=3;
+                }
+            }
+            $pr[]=array('respuestas'=>$cantidadRespuestas,'puntajes_preguntas'=>$puntajes_preguntas);
+        }
+        echo json_encode($pr);
     }
     public function ajaxFetch(Request $request){
         $input =   $request->all(); 
@@ -441,10 +594,31 @@ class CuestionariosController extends Controller
         $cuestionario =Cuestionario::where('codigo','=',$codigo)->first();
         $puntajes =Puntaje::where('idCuestionario','=',$cuestionario->idCuestionario);
         $preguntas =Pregunta::where('idCuestionario','=',$cuestionario->idCuestionario);
+        $puntajes_preguntas =PuntajePreguntum::where('idCuestionario','=',$cuestionario->idCuestionario);
         try{
+            $puntajes_preguntas->delete();
             $puntajes->delete();
             $preguntas->delete();
             $cuestionario->delete();
+            
+            echo json_encode(true);
+        }catch(\Illuminate\Database\QueryException $e){
+            echo json_encode($e);
+        }
+    }
+    public function destroyPointer(Request $request)
+    {
+        //
+        $input = $request->all();
+
+        $codigo = $input['codigo'];
+       
+        $puntajes =Puntaje::where('idCuestionario','=',$cuestionario->idCuestionario);
+        $puntajes_preguntas =PuntajePreguntum::where('idCuestionario','=',$cuestionario->idCuestionario);
+        try{
+            $puntajes_preguntas->delete();
+            $puntajes->delete();
+            
             echo json_encode(true);
         }catch(\Illuminate\Database\QueryException $e){
             echo json_encode($e);

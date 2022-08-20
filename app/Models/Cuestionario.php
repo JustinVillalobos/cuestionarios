@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property Usuario $usuario
  * @property Collection|Pregunta[] $preguntas
+ * @property Collection|PuntajePreguntum[] $puntaje_pregunta
  * @property Collection|Puntaje[] $puntajes
  *
  * @package App\Models
@@ -85,6 +86,11 @@ class Cuestionario extends Model
 	public function preguntas()
 	{
 		return $this->hasMany(Pregunta::class, 'idCuestionario');
+	}
+
+	public function puntaje_pregunta()
+	{
+		return $this->hasMany(PuntajePreguntum::class, 'idCuestionario');
 	}
 
 	public function puntajes()

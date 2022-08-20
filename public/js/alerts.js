@@ -38,7 +38,7 @@ function alertTimeCorrect(mensaje,callback) {
     willOpen: () => {
       Swal.showLoading()
       timerInterval = setInterval(() => {
-        const content = Swal.getContent()
+        const content = Swal.getHtmlContainer()
         if (content) {
           const b = content.querySelector('b')
           if (b) {

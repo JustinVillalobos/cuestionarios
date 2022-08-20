@@ -30,9 +30,12 @@ Route::get('caso_estudio',[CuestionariosController::class, 'caso_estudio'])->nam
 
 Route::post('insertUser',[CuestionariosController::class, 'insertUser'])->name('cuestionarios.insertUser');
 Route::post('updatePuntaje',[CuestionariosController::class, 'updatePuntaje'])->name('cuestionarios.updatePuntaje');
+Route::post('refreshData',[CuestionariosController::class, 'refreshData'])->name('cuestionarios.refreshData');
 Route::post('sala',[CuestionariosController::class, 'sala'])->name('cuestionarios.sala');
+Route::get('cuestionarios/graficos/{id}',[CuestionariosController::class, 'graficos'])->name('cuestionarios.graficos');
 
 Route::post('live',[CuestionariosController::class, 'ajaxFetch'])->name('cuestionarios.ajaxFetch');
+Route::post('liveGraficos',[CuestionariosController::class, 'ajaxFetchG'])->name('cuestionarios.ajaxFetchG');
 
 Route::resource('usuarios',UsuariosController::class);
 Route::get('busqueda',[UsuariosController::class, 'busqueda'])->name('usuarios.busqueda');

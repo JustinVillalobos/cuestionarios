@@ -45,6 +45,9 @@
         <button id="button" class="btn btn-info text-white" style="margin-left:5px">
             <i class="fa fa-play" aria-hidden="true"></i>
         </button>
+        <a href='{{route("cuestionarios.graficos", [$cuestionario])}}' class="btn btn-warning text-white" style="margin-left:5px">
+            <i class="fa fa-pie-chart"></i>
+        </a>
     </div>
 </div>
 <div class="row" style="margin-top:15px;padding-left:5px;padding-bottom:15px;">

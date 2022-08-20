@@ -108,6 +108,10 @@ function uploadImage(cuestionario,cantidadErrores,isValid){
     $avatarInput = $("#file");
     $avatarForm = $("#form");
     var formData = new FormData();
+    if( $avatarInput[0].files.length==0){
+        save("",cuestionario,cantidadErrores,isValid);
+        return;
+    }
         $avatarImage = $avatarInput[0].files[0];
         console.log($avatarImage.type);
         if( $avatarInput[0].files>1){
@@ -433,9 +437,46 @@ function desplaceTop(){
   }
   function selectImg(){
     
-    let value=$("#img").val();
-    console.log("Ingreso",value);
-    $("#profile").attr('src','../assets/avatars/avatar'+value+".png");
+    let value=$("#avatar");
+    let $avatarInput =$("#avatar");
+    let valid=false;
+    if( $avatarInput[0].files.length>1){
+        $("#avatar + span").text("Solo se permite subir una imagen");
+        $("#avatar").val("")
+        valid=true;
+    }else{
+        if( $avatarInput[0].files.length!=0){
+            let $avatarImage=$avatarInput[0].files[0];
+            if($avatarImage.size>1000000){
+                $("#avatar + span").text("Tamaño de la imagen muy grande");
+                $("#avatar").val("")
+                valid=true;
+            }
+            if($avatarImage.type!="image/jpeg" && $avatarImage.type!="image/png" && $avatarImage.type!="image/jpg" && $avatarImage.type!="image/svg" && $avatarImage.type!="image/gif"){
+                $("#avatar + span").text("Formato de archivo no aceptado, solo permitido PNG,JPG,JPEG,GIF,SVG");
+                $("#avatar").val("")
+                valid=true;
+            }
+        }else{
+            $("#avatar + span").text("**Es un campo requerido");
+            $("#avatar").val("")
+            valid=true;
+        }
+       
+    }
+    if(!valid){
+        let img =value[0].files[0];
+        console.log("Ingreso",value);
+        var reader = new FileReader();
+        reader.onload = function(){
+            document.getElementById('profile').src = this.result;
+            };
+        reader.readAsDataURL(img);
+        $("#avatar + span").text("");
+    }else{
+        document.getElementById('profile').src ="";
+    }
+    
   }
   function  stringLength(value,max){
     if(value.length<=max){
@@ -491,6 +532,12 @@ function save(name,cuestionario,cantidadErrores,isValid){
             cuestionario.seccion = $("#seccion").val();
             console.log(cuestionario);
             if(cantidadErrores==0){
+                $avatarInput = $("#avatar");
+               
+               // cuestionario.imagen =  $avatarInput[0].files[0];
+               let formData =new FormData();
+               formData.append('cuestionario',JSON.stringify(cuestionario));
+               formData.append('imagen',$avatarInput[0].files[0]);
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -499,7 +546,9 @@ function save(name,cuestionario,cantidadErrores,isValid){
                   $.ajax({
                     type:'POST',
                     url:'../cuestionarios/store',
-                    data:{cuestionario:cuestionario},
+                    data:formData,
+                    processData:false,
+                    contentType:false,
                     success:function(data){
                         console.log(data);
                         let json = JSON.parse(data);
@@ -555,7 +604,7 @@ $("#save").click(function(){
             cuestionario.genero=$("#genero").val();
             cuestionario.trabajo=$("#trabajo").val();
             cuestionario.hijos=$("#hijos").val();
-            cuestionario.imagen = $("#img").val();
+           // cuestionario.imagen = $("#img").val();
            
             cuestionario.seccion = $("#seccion").val();
             cuestionario.antecedentesPersonales=sceditor.instance(antecedentesPersonales).val();
@@ -674,6 +723,43 @@ $("#save").click(function(){
             }
             valid=false;
 
+
+            $avatarInput = $("#avatar");
+            console.log($avatarInput[0].files);
+             if( $avatarInput[0].files.length>1){
+                $("#avatar + span").text("Solo se permite subir una imagen");
+                $("#avatar").val("")
+                valid=true;
+            }else{
+                if( $avatarInput[0].files.length!=0){
+                    let $avatarImage=$avatarInput[0].files[0];
+                    if($avatarImage.size>1000000){
+                        $("#avatar + span").text("Tamaño de la imagen muy grande");
+                        $("#avatar").val("")
+                        valid=true;
+                        cantidadErrores++;
+                    }
+                    if($avatarImage.type!="image/jpeg" && $avatarImage.type!="image/png" && $avatarImage.type!="image/jpg" && $avatarImage.type!="image/svg" && $avatarImage.type!="image/gif"){
+                        $("#avatar + span").text("Formato de archivo no aceptado, solo permitido PNG,JPG,JPEG,GIF,SVG");
+                        $("#avatar").val("")
+                        valid=true;
+                        cantidadErrores++;
+                    }
+                }else{
+                    $("#avatar + span").text("**Es un campo requerido");
+                    $("#avatar").val("")
+                    valid=true;
+                    cantidadErrores++;
+                }
+               
+            }
+            
+            if(!valid){    
+                $('#avatar + span').text("");
+                $avatarImage = $avatarInput[0].files[0]; 
+            }
+            valid=false;
+            
             /***************************************** */
             let ap = cuestionario.antecedentesPersonales;
             if(!stringLength(ap,10000)){

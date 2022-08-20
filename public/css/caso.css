@@ -246,6 +246,45 @@
     width: 100px;
  
 }
+.card{
+  background: #edecf0;
+}
+.bg-light2{
+  background: #d0d0d2df;
+  font-size: 12px;
+  color:black;
+}
+.progress-bar{
+  height: 60px;
+
+}
+.text-pregunta{
+  font-size: 12px;
+  color:black;
+  padding-top: 5px;
+  padding-left: 15px;
+  width: 100%;
+}
+.text-pregunta .col-sm-2{
+  height: 45px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  padding-left: 0px;
+}
+.text-pregunta .col-sm-10 textarea{
+  width: 100%;
+  height: 50px;
+  font-size: 14px;
+  z-index: 1000;
+  padding: 5px 5px 5px 5px;
+  word-break: break-all;
+  overflow: hidden;
+   resize: none; 
+  line-height: 15px;
+  background: transparent;
+  border: none;
+}
 @-webkit-keyframes rotate2 {
   100% {
     transform: rotate(360deg);

@@ -48,6 +48,17 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row div-det div-punt-{{$key}}" style="margin-top: 12%;display:none;width: 97%;">
+                                     <div class="col-sm-12 "><h3 class="pregunta"><strong>Puntajes</strong></h3></div>
+                                        <div class="col-sm-12">
+                                            <div class="row data_table" id="data_table"></div>
+       
+        
+                                        </div>
+                                        <div class="col-sm-12 d-flex justify-content-center" style="margin-top: 10px;">
+                                            <button class="btn btn-primary btn-hecho" style="width:200px!important;"onclick="showDetails({{$key}})">Ver Detalles</button>
+                                        </div>
+                                    </div>
                                     <div class="row div-det div-det-{{$key}}" style="margin-top: 12%;display:none;width: 97%;">
                                      <div class="col-sm-12 "><h3 class="pregunta"><strong>Detalles</strong></h3></div>
                                         <div class="col-sm-12">

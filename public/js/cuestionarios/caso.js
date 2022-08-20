@@ -141,7 +141,15 @@ function setCards(preguntas){
 }
 function next(){
     isReponse=false;
+    if(!isValidNext){
+
+        console.log("Ingrso");
+        alertError("Lo sentimos, debe completar la pregunta para poder continuar");
+        return;
+    }
     console.log("NEXT",isValidNext);
+    clearInterval(intervalGrap);
+    intervalGrap =null;
     if(isValidNext && indice<cantidad){
         let swiper2 = document.querySelector('.swiper').swiper;
         swiper2.slideNext();
@@ -173,7 +181,7 @@ function next(){
     }
     console.log(indice,cantidad);
     isValidNext=false;
-    $(".control").css("pointer-events","none");
+   // $(".control").css("pointer-events","none");
     $(".spinnerDiv").css("display","none");
     confettiAnimacionNext();
 }
@@ -199,6 +207,38 @@ function confettiAnimacion(id,res){
     confetti.setFade(false);
     confetti.destroyTarget(false);
     document.getElementsByClassName('response'+id+""+res)[0].click();*/
+}
+let numeroPregunta=0;
+let intervalGrap=null;
+
+function graphRefresh(p,pregunta){
+    intervalGrap = setInterval(() => {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+          $.ajax({
+            type:'POST',
+            url:'./refreshData',
+            data:{puntaje:p},
+            success:function(data){
+                console.log(data);
+                let json = JSON.parse(data);
+                if(json!=false){
+                    console.log(json);
+                    let l = labels(json.pr[0].respuestas);
+                    let d = getData(json.pr[0].puntajes_preguntas,json.pr[0].respuestas);
+                    let data_chart = {labels:l,data:d};
+                    let pre = json.preguntas;
+                    chart(data_chart,0,pre,pregunta);
+                    numeroPregunta++;
+                }
+            }
+        });
+    }, 1000);
+    
 }
 function responseQuestion(pregunta,solucion){
     if(isReponse){
@@ -229,13 +269,24 @@ function responseQuestion(pregunta,solucion){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    console.log(p);
+    console.log(p,pregunta,respuesta);
       $.ajax({
         type:'POST',
         url:'./updatePuntaje',
         data:{puntaje:p},
         success:function(data){
             console.log(data);
+            let json = JSON.parse(data);
+            if(json!=false){
+                console.log(json);
+                let l = labels(json.pr[0].respuestas);
+                let d = getData(json.pr[0].puntajes_preguntas,json.pr[0].respuestas);
+                let data_chart = {labels:l,data:d};
+                let pre = json.preguntas;
+                chart(data_chart,0,pre,pregunta);
+                graphRefresh(p,pregunta);
+                numeroPregunta++;
+            }
             respuesta=0;
             if(indice<cantidad){
                isValidNext=true;
@@ -244,18 +295,19 @@ function responseQuestion(pregunta,solucion){
                 $(".btn-res"+pregunta).prop('disabled',true);
                 $(".spinnerDiv").css("display","block");
                 $(".div-slide-"+pregunta).css("display","none");
-                $('.div-det').fadeOut(); //fade out//fade in div
-                $(".div-det-"+pregunta).fadeIn();
+                $('.div-punt').fadeOut(); //fade out//fade in div
+                $(".div-punt-"+pregunta).fadeIn();
                 localStorage.setItem("preguntasContestadas",JSON.stringify(preguntas));
             }else{
+                isValidNext=true;
                 $(".btn-res"+pregunta).prop('disabled',true);
                /* localStorage.setItem("preguntasContestadas","[]");
                 localStorage.setItem('usuario',"");
                 localStorage.setItem('codigo',"");
                 localStorage.setItem("randomCodigo","");*/
                 $(".div-slide-"+pregunta).css("display","none");
-                $('.div-det').fadeOut(); //fade out//fade in div
-                $(".div-det-"+pregunta).fadeIn();
+                $('.div-punt').fadeOut(); //fade out//fade in div
+                $(".div-punt-"+pregunta).fadeIn();
                 $(".control").css("pointer-events","all");
                 $(".spinnerDiv").css("display","block");
             }
@@ -269,6 +321,115 @@ function responseQuestion(pregunta,solucion){
      });
     
     
+}
+function labels( long){
+    let labels=[];
+    let options="ABCD";
+    for(let i=0;i<long;i++){
+        labels.push(options.charAt(i));
+    }
+    return labels;
+}
+function getData(res,long){
+    let data=[];
+    let  p =[0,0,0,0];
+   console.log(res,"*********************************");
+   //p[indexP]=res[index].respuesta_count;
+   for(let n=0;n<p.length;n++){
+        let encontrado=0;
+        for(let i=0;i<res.length;i++){
+            if(n==res[i].respuesta){
+                p[n]=res[i].respuesta_count;
+                encontrado=1;
+            }
+        }
+        if(encontrado==0){
+            p[n]=0;
+        }
+    }
+    let total=0;
+    for(let j=0;j<p.length;j++){
+        total=total+p[j];   
+    }
+    for(let k=0;k<long;k++){
+      
+        let v = ((p[k]*100)/total).toFixed(2);
+        data.push(v);
+        
+    }
+    console.log(data);
+    return p;
+}
+function chart(graph,index,preguntas,indexx){
+    let new_index="";
+    let i = index+1;
+    if(indexx<9){
+        new_index ="0"+(indexx+1);
+    }else{
+        new_index =""+(indexx+1);
+    }
+     console.log(preguntas);
+    let html="";
+    let total=0;
+    for(let j=0;j<graph.data.length;j++){
+        total=total+graph.data[j];   
+    }
+    
+        html+="<div class='col-sm-12 d-flex justify-content-center' style='margin-top:25px;'>"
+            html+="<div class='card'>";
+                html+='<div class="card-body">';
+                    html+='<div class="row">';
+                        html+='<div class="col-sm-12">';
+                                html+="<strong>Pregunta "+new_index+":"+preguntas[index].pregunta+"</strong>";
+                        html+="</div>";
+                       let percentaje= (((graph.data[0])*100)/total).toFixed(2);
+                        html+='<div class="col-sm-12" style="margin-top:5px;">';
+                                html+='<div class="progress" style="height:60px;background: white;">';
+                                    html+='<div class="progress-bar bg-light2" style="width:'+percentaje+'%;position:;"></div>';
+                                    html+='<div class="text-pregunta" style="position:absolute;"><div class="row"><div class="col-sm-10"><textarea rows="4" disabled>'+preguntas[index].respuesta1+'</textarea></div><div class="col-sm-2">'+percentaje+'%</div></div></div>';
+                                html+=' </div>';
+                        html+="</div>";
+                        percentaje= (((graph.data[1])*100)/total).toFixed(2);
+                        html+='<div class="col-sm-12" style="margin-top:5px;">';
+                                html+='<div class="progress" style="height:60px;background: white;">';
+                                    html+='<div class="progress-bar bg-light2" style="width:'+percentaje+'%;position:;"></div>';
+                                    html+='<div class="text-pregunta" style="position:absolute;"><div class="row"><div class="col-sm-10"><textarea rows="4" disabled>'+preguntas[index].respuesta2+'</textarea></div><div class="col-sm-2">'+percentaje+'%</div></div></div>';
+                                html+=' </div>';
+                        html+="</div>";
+
+                        if(preguntas[index].respuesta3!=""){
+                            percentaje= (((graph.data[2])*100)/total).toFixed(2);
+                            html+='<div class="col-sm-12" style="margin-top:5px;">';
+                                html+='<div class="progress" style="height:60px;background: white;">';
+                                    html+='<div class="progress-bar bg-light2" style="width:'+percentaje+'%;position:;"></div>';
+                                    html+='<div class="text-pregunta" style="position:absolute;"><div class="row"><div class="col-sm-10"><textarea rows="4" disabled>'+preguntas[index].respuesta3+'</textarea></div><div class="col-sm-2">'+percentaje+'%</div></div></div>';
+                                html+=' </div>';
+                            html+="</div>"
+                        }
+                        console.log(graph.data.length);
+                        if(preguntas[index].respuesta4!=""){
+                            percentaje= (((graph.data[3])*100)/total).toFixed(2);
+                            html+='<div class="col-sm-12" style="margin-top:5px;">';
+                                html+='<div class="progress" style="height:60px;background: white;">';
+                                    html+='<div class="progress-bar bg-light2" style="width:'+percentaje+'%;position:;"></div>';
+                                    html+='<div class="text-pregunta" style="position:absolute;"><div class="row"><div class="col-sm-10"><textarea  rows="4" disabled>'+preguntas[index].respuesta4+'</textarea></div><div class="col-sm-2">'+percentaje+'%</div></div></div>';
+                                html+=' </div>';
+                            html+="</div>"
+                        }
+                html+="</div>";
+                    html+="</div>";
+                html+="</div>";
+            html+="</div>";
+        html+="</div>";
+        console.log(".div-punt-"+(indexx)+" .data_table");
+        console.log($(".div-punt-"+(indexx)+" .data_table"));
+        $(".div-punt-"+(indexx)+" .data_table").html(html);
+
+
+}
+function showDetails(key){
+    $('.div-det').fadeOut(); //fade out//fade in div
+    $(".div-det-"+key).fadeIn(); 
 }
 $( document ).ready(function() {
     confettiAnimacionDemo();

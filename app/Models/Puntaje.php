@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $idCuestionario
  * 
  * @property Cuestionario $cuestionario
+ * @property Collection|PuntajePreguntum[] $puntaje_pregunta
  *
  * @package App\Models
  */
@@ -52,5 +54,10 @@ class Puntaje extends Model
 	public function cuestionario()
 	{
 		return $this->belongsTo(Cuestionario::class, 'idCuestionario');
+	}
+
+	public function puntaje_pregunta()
+	{
+		return $this->hasMany(PuntajePreguntum::class, 'idPuntajes');
 	}
 }

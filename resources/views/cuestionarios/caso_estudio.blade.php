@@ -69,8 +69,14 @@
                                 <div class="col-sm-12 d-flex justify-content-start" style="padding-top:0px;padding-left:55px;">
                                     <h3 id="title"><i class="fa fa-user-md text-primary" aria-hidden="true"></i> Caso De <span class="text-primary">Estudio</span></h3>
                                 </div>
-                                <div class="col-sm-12 d-flex justify-content-start" style="margin-top:5%;width:250px;height: 250px;">
-                                    <img src="{{ URL::asset('assets/avatars/avatar'.$cuestionario->imagen.'.png'); }}" style="width:250px;height: 250px;"/>
+                                <div class="col-sm-12 d-flex justify-content-start" style="margin-top:5%;width:250px;height: 250px;    padding-left: 50px;">
+                                    <?php $img=strlen($cuestionario->imagen);?>
+                                    @if($img < 3)
+                                        <img src="{{ URL::asset('assets/avatars/avatar'.$cuestionario->imagen.'.png'); }}" style="width:250px;height: 250px;"/>
+                                    @endif
+                                    @if($img >= 3)
+                                        <img src="{{ URL::asset($cuestionario->imagen); }}" style="width:250px;height: 250px;"/>
+                                    @endif
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12 d-flex justify-content-start moreInfoTitle" style="margin-top:5%;padding-left:65px;">
@@ -272,6 +278,9 @@
   on: {
     reachEnd: function () {
       console.log('reached-end');
+      let html="";
+        html = setCards(preguntas);
+        $(".final-col").html(html);
     },
 }
 

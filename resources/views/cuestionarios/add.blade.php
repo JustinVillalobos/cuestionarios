@@ -71,11 +71,7 @@
         <div class="row" style="margin-top:5px;">
             <div class="col-sm-12 form-inline text-end">
                 <label class="text-danger font-weight-bold" style="width:30%;justify-content: end; margin-right: 5px;">Imagen:</label>
-                 <select class="form-select" id="img" style="width:67%;">
-                    <?php for($i=1;$i<24;$i++){ ?>
-                    <option value="<?php echo $i;?>" data-active="0">Avatar <?php echo $i;?></option>
-                    <?php } ?>
-                 </select>
+                <input type="file" class="form-control" id="avatar"  style="width:67%;" onchange="selectImg()"/>
                  <span class="text-danger" style="width:100%;margin-right:25%;font-size:11px;"></span>
              </div>
         </div>
@@ -83,7 +79,7 @@
     </div>
     <div class="col-sm-6 d-flex justify-content-center align-items-center">
         <div class="col-sm-12 d-flex justify-content-center align-items-center">
-                        <img src="{{ URL::asset('assets/avatars/avatar1.png');}}" id='profile' style="width:255px;"/>
+                        <img src="" id='profile' style="width:255px;"/>
         </div>
     </div>
     <div class="col-sm-12" style="padding:10px 20px 0px 20px;">
