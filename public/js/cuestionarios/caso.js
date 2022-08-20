@@ -20,7 +20,7 @@ $("#demo").click(function(){
         url:'./insertUser',
         data:{puntaje:{usuario:usuario,codigo:codigo,idCuestionario:idCuestionario}},
         success:function(data){
-            console.log(data);
+
             if(data=='false')
             {
                 alertError("Usuario ya registrado en sala");
@@ -55,7 +55,7 @@ function desplaceTop(){
   }
 function showData(id){
     
-    console.log("INGRESO",id,isReponse);
+    
     
     $("#data"+id).css("display","block");
     $(".data"+id).css("display","block");
@@ -142,12 +142,15 @@ function setCards(preguntas){
 function next(){
     isReponse=false;
     if(!isValidNext){
-
-        console.log("Ingrso");
-        alertError("Lo sentimos, debe completar la pregunta para poder continuar");
+        if(indice==0){
+            alertError("Lo sentimos, debe visualizar las cuatro secciones para continuar");
+        }else{
+            alertError("Lo sentimos, debe completar la pregunta para poder continuar");
+        }
+       
         return;
     }
-    console.log("NEXT",isValidNext);
+  
     clearInterval(intervalGrap);
     intervalGrap =null;
     if(isValidNext && indice<cantidad){
@@ -157,10 +160,7 @@ function next(){
 
     }else{
         $(".btn-res").prop('disabled',true);
-      /*  localStorage.setItem("preguntasContestadas","[]");
-        localStorage.setItem('usuario',"");
-        localStorage.setItem('codigo',"");
-        localStorage.setItem("randomCodigo","");*/
+
         let html="";
         html = setCards(preguntas);
         $(".final-col").html(html);
@@ -174,12 +174,9 @@ function next(){
     }
     if(indice>cantidad){
         $(".btn-res").prop('disabled',true);
-       /* localStorage.setItem("preguntasContestadas","[]");
-        localStorage.setItem('usuario',"");
-        localStorage.setItem('codigo',"");
-        localStorage.setItem("randomCodigo","");  */
+
     }
-    console.log(indice,cantidad);
+
     isValidNext=false;
    // $(".control").css("pointer-events","none");
     $(".spinnerDiv").css("display","none");
@@ -224,15 +221,14 @@ function graphRefresh(p,pregunta){
             url:'./refreshData',
             data:{puntaje:p},
             success:function(data){
-                console.log(data);
                 let json = JSON.parse(data);
                 if(json!=false){
-                    console.log(json);
+                 
                     let l = labels(json.pr[0].respuestas);
                     let d = getData(json.pr[0].puntajes_preguntas,json.pr[0].respuestas);
                     let data_chart = {labels:l,data:d};
                     let pre = json.preguntas;
-                    chart(data_chart,0,pre,pregunta);
+                    //chart(data_chart,0,pre,pregunta);
                     numeroPregunta++;
                 }
             }
@@ -249,7 +245,7 @@ function responseQuestion(pregunta,solucion){
        confettiAnimacion(pregunta,solucion);
         let element = document.getElementById("correct");
         element.volume = document.getElementById("mislider").value;
-        console.log(element);
+        
         element.play();
          p ={pregunta:pregunta,respuesta:respuesta,isCorrecto:true,codigo: localStorage.getItem('codigo')};
         let rsp=alertTimeCorrect("¡Muchas gracias!<br> Respuesta recibida",function(response){
@@ -269,16 +265,16 @@ function responseQuestion(pregunta,solucion){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    console.log(p,pregunta,respuesta);
+   
       $.ajax({
         type:'POST',
         url:'./updatePuntaje',
         data:{puntaje:p},
         success:function(data){
-            console.log(data);
+
             let json = JSON.parse(data);
             if(json!=false){
-                console.log(json);
+
                 let l = labels(json.pr[0].respuestas);
                 let d = getData(json.pr[0].puntajes_preguntas,json.pr[0].respuestas);
                 let data_chart = {labels:l,data:d};
@@ -333,7 +329,7 @@ function labels( long){
 function getData(res,long){
     let data=[];
     let  p =[0,0,0,0];
-   console.log(res,"*********************************");
+  
    //p[indexP]=res[index].respuesta_count;
    for(let n=0;n<p.length;n++){
         let encontrado=0;
@@ -357,7 +353,7 @@ function getData(res,long){
         data.push(v);
         
     }
-    console.log(data);
+  
     return p;
 }
 function chart(graph,index,preguntas,indexx){
@@ -368,7 +364,7 @@ function chart(graph,index,preguntas,indexx){
     }else{
         new_index =""+(indexx+1);
     }
-     console.log(preguntas);
+     
     let html="";
     let total=0;
     for(let j=0;j<graph.data.length;j++){
@@ -406,7 +402,7 @@ function chart(graph,index,preguntas,indexx){
                                 html+=' </div>';
                             html+="</div>"
                         }
-                        console.log(graph.data.length);
+                        
                         if(preguntas[index].respuesta4!=""){
                             percentaje= (((graph.data[3])*100)/total).toFixed(2);
                             html+='<div class="col-sm-12" style="margin-top:5px;">';
@@ -421,8 +417,7 @@ function chart(graph,index,preguntas,indexx){
                 html+="</div>";
             html+="</div>";
         html+="</div>";
-        console.log(".div-punt-"+(indexx)+" .data_table");
-        console.log($(".div-punt-"+(indexx)+" .data_table"));
+
         $(".div-punt-"+(indexx)+" .data_table").html(html);
 
 
@@ -457,7 +452,7 @@ $( document ).ready(function() {
             $("html").css("background","white");
             isEntered=true;
             preguntas = JSON.parse(localStorage.getItem("preguntasContestadas"));
-            console.log(preguntas,cantidad,(preguntas.length+1));
+            
             if((preguntas.length+1)<=cantidad){
                 swiper2.slideTo(preguntas.length+1);
             }
@@ -496,8 +491,7 @@ function reinitSala(){
 }
 
 $(".swiper img").click(function(e){
-    console.log(e);
-    console.log($(this).attr('src'));
+
     $("#visorI").attr('src',$(this).attr('src'));
     $("#visor").modal("show");
 })

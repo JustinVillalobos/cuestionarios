@@ -5,11 +5,9 @@ $( document ).ready(function() {
 });
 function stop(){
     clearInterval(intervalId);
-    console.log("TERMIAN");
     intervalId =null;$("#button").removeClass("btn-danger");
     $("#button").addClass("btn-info");
     $("#button").html("<i class='fa fa-play'></i>");
-    console.log("TERMIAN");
 }
 $("#button").click(function(){
     if($("#button").hasClass('btn-danger')){
@@ -40,10 +38,6 @@ function live(){
     });
     intervalId=setInterval(() => {
         if(estado==false){
-            console.log("Termino LIVE");
-          
-            
-
         }else{
             $.ajax({
                 type:'POST',

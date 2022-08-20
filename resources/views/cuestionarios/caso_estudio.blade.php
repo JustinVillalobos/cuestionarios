@@ -65,11 +65,11 @@
                 <div class='swiper-fe'>
                    <div class="row swip">
                         <div class="col-sm-4 d-flex align-items-center">
-                            <div class="row " style="height: 75vh;">
+                            <div class="row row-data-info" style="height: 75vh;">
                                 <div class="col-sm-12 d-flex justify-content-start" style="padding-top:0px;padding-left:55px;">
-                                    <h3 id="title"><i class="fa fa-user-md text-primary" aria-hidden="true"></i> Caso De <span class="text-primary">Estudio</span></h3>
+                                    <h3 id="title"><i class="fa fa-user-md text-primary" aria-hidden="true"></i>Net<span class="text-primary2">Challenge</span></h3>
                                 </div>
-                                <div class="col-sm-12 d-flex justify-content-start" style="margin-top:5%;width:250px;height: 250px;    padding-left: 50px;">
+                                <div class="col-sm-12 d-flex justify-content-start c-i" style="margin-top:5%;width:250px;height: 250px;    padding-left: 50px;">
                                     <?php $img=strlen($cuestionario->imagen);?>
                                     @if($img < 3)
                                         <img src="{{ URL::asset('assets/avatars/avatar'.$cuestionario->imagen.'.png'); }}" style="width:250px;height: 250px;"/>
@@ -99,16 +99,22 @@
                                     <div class="col-sm-12 d-flex justify-content-start moreInfo" style="padding-top:0px;padding-left:65px;">
                                         <label><strong>Trabajo:</strong>{{$cuestionario->trabajo}}</label>
                                     </div>
-                                    <div class="col-sm-12 d-flex justify-content-start moreInfo" style="padding-top:0px;padding-left:60px;">
-                                        <label><strong>¿Tiene Hijos?:</strong>
-                                            @if($cuestionario->hijos=="" || $cuestionario->hijos=="0")
-                                                No
+                                    @if($cuestionario->genero=="0")
+                                                
                                             @endif
-                                            @if($cuestionario->hijos!="" && $cuestionario->hijos!="0")
-                                                $cuestionario->hijos
+                                            @if($cuestionario->genero!="0")
+                                            <div class="col-sm-12 d-flex justify-content-start moreInfo" style="padding-top:0px;padding-left:60px;">
+                                                <label><strong>¿Tiene Hijos?:</strong>
+                                                    @if($cuestionario->hijos=="" || $cuestionario->hijos=="0")
+                                                        No
+                                                    @endif
+                                                    @if($cuestionario->hijos!="" && $cuestionario->hijos!="0")
+                                                        $cuestionario->hijos
+                                                    @endif
+                                                </label>
+                                            </div>
                                             @endif
-                                        </label>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -277,7 +283,6 @@
   },
   on: {
     reachEnd: function () {
-      console.log('reached-end');
       let html="";
         html = setCards(preguntas);
         $(".final-col").html(html);

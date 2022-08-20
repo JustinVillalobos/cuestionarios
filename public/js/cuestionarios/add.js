@@ -68,15 +68,14 @@ $( document ).ready(function() {
             indicePregunta = 1;
            
             preguntas = JSON.parse(localStorage.getItem('preguntas'));
-            
-            console.log("INGRESO INICIO",preguntas);
+         
             preguntas.forEach(element => {
                 addPregunta(indicePregunta,element.pregunta,element.detalles,element.ayuda,element.definiciones);
                 indicePregunta++;
                
             });
             $("#preguntas").append(html);
-            console.log("HILO");
+        
             indicePregunta = 1;
             preguntas.forEach(element => {
                 if(element.respuestas.length!=0){
@@ -113,7 +112,7 @@ function uploadImage(cuestionario,cantidadErrores,isValid){
         return;
     }
         $avatarImage = $avatarInput[0].files[0];
-        console.log($avatarImage.type);
+        
         if( $avatarInput[0].files>1){
             $("#file + span").text("Solo se permite subir una imagen");
             $("#file").val("")
@@ -162,7 +161,7 @@ function reload(){
            
             preguntas = JSON.parse(localStorage.getItem('preguntas'));
             
-            console.log("INGRESO INICIO",preguntas);
+            
             preguntas.forEach((element,i) => {
                 preguntas[i].indice = i;
                 addPregunta(indicePregunta,element.pregunta,element.detalles,element.ayuda,element.definiciones);
@@ -170,7 +169,7 @@ function reload(){
                
             });
             $("#preguntas").append(html);
-            console.log("HILO");
+            
             indicePregunta = 1;
             preguntas.forEach(element => {
                 if(element.respuestas.length!=0){
@@ -192,7 +191,7 @@ function remove(indice){
         preguntas.splice(0,1);
     }
     preguntas.forEach((e,i) => {
-        console.log(e.indice,indice);
+       
         if((e.indice)==indice){
             preguntas.splice(i,1);
         }
@@ -201,7 +200,7 @@ function remove(indice){
     let divs = $("#preguntas .pregunta");
     $("#pregunta"+indice).remove();
 
-    console.log(preguntas,indice);
+    
     divs = $("#preguntas .pregunta");
     divs.each((i,element) => {
         let id=$(element).attr('id');
@@ -211,7 +210,7 @@ function remove(indice){
     localStorage.setItem('preguntas',JSON.stringify(preguntas));
 }
 function addPregunta(i,pregunta,de,ay,def){
-    console.log(de);
+   
     html+="<div class='col-sm-12 pregunta' id='pregunta"+i+"' style='padding:10px 20px 10px 20px;margin-top:20px;'>";
         html+="<div class='row section'>";
             html+="<div class='col-sm-11 mouse-over' data-toggle='collapse' data-target='#collapseExample"+i+"' aria-expanded='false' aria-controls='collapseExample'>";
@@ -268,7 +267,7 @@ function respuesta(ind,indice,resp,i){
       
         html2+="<div class='r"+i+" col-sm-11' style='margin-top:5px;'><strong>Respuesta #"+(i+1)+":</strong>"+resp+"</div>";
         html2+="<div class='r"+i+" col-sm-1' style='margin-top:5px;'><button class='btn btn-danger' onclick='removeRespuesta("+indice+","+i+")'><i class='fa fa-trash'></i></button></div>";
-        console.log( $('#respuestas'+indice+" .append"),'#respuestas'+indice);
+        
         $('#respuestas'+indice+" .append").append(html2);
         html2="";
         html2="<option value='"+(i)+"'>"+resp+"</option>";
@@ -281,14 +280,14 @@ function respuesta(ind,indice,resp,i){
 }
 function searchIndex(indice){
    for(let i=0;i<preguntas.length;i++){
-    console.log(indice,preguntas[i].indice);
+   
         if(preguntas[i].indice==indice){
             return i;
         }
     }
 }
 function removeRespuesta(indiceLista,indiceRespuesta){
-    console.log(indiceLista,indiceRespuesta);
+   
     let newindice=0;
     preguntas.forEach((e,i) => {
         if(e.indice==indiceLista){
@@ -296,16 +295,16 @@ function removeRespuesta(indiceLista,indiceRespuesta){
             
         }
     });
-    console.log("NEW INDICE "+newindice, preguntas[(indiceLista-1)]);
+    
     preguntas[(indiceLista-1)].respuestas.splice(indiceRespuesta,1);
-    console.log("NEW INDICE "+newindice, preguntas[(indiceLista-1)]);
+   
    let options= $(".solucion #solucion"+indiceLista+" option");
    options.each((i,element) => {
      element.remove();
    });
    $('#respuestas'+indiceLista+" .append div").remove();
    indicePregunta = 1;
-   console.log("NEW INDICE ", preguntas[(indiceLista-1)].respuestas);         
+      
    preguntas[(indiceLista-1)].respuestas.forEach((resp,indexRespuesta) => {
                         respuesta((indiceLista-1),indiceLista,resp.respuesta,indexRespuesta);
                     });
@@ -316,7 +315,6 @@ function removeRespuesta(indiceLista,indiceRespuesta){
 }
 function addResponse(indice){
     let index = searchIndex(indice);
-    console.log(index,indice,preguntas[(indice-1)]);
     let newindice=0;
     let notIngres=false
     preguntas.forEach((e,i) => {
@@ -333,7 +331,7 @@ function addResponse(indice){
             }
         });
     }
-    console.log("NEW INDICE "+newindice);
+   
     let resp = $("#respuesta"+indice).val();
     if(preguntas[(newindice)].respuestas.length>=4){
         alertError("No se puede agregar mas respuestas a la pregunta");
@@ -466,7 +464,7 @@ function desplaceTop(){
     }
     if(!valid){
         let img =value[0].files[0];
-        console.log("Ingreso",value);
+        
         var reader = new FileReader();
         reader.onload = function(){
             document.getElementById('profile').src = this.result;
@@ -518,7 +516,7 @@ function wordsInvalid(text){
     if(result!=null && result!=undefined){
         count++;
     }
-    console.log("RESULTADO MATCH:"+count);
+    
     if(count==0){
         return false;
     }else{
@@ -530,7 +528,6 @@ function save(name,cuestionario,cantidadErrores,isValid){
    
             cuestionario.imagenSeccion=name;
             cuestionario.seccion = $("#seccion").val();
-            console.log(cuestionario);
             if(cantidadErrores==0){
                 $avatarInput = $("#avatar");
                
@@ -550,7 +547,6 @@ function save(name,cuestionario,cantidadErrores,isValid){
                     processData:false,
                     contentType:false,
                     success:function(data){
-                        console.log(data);
                         let json = JSON.parse(data);
                         if(json){
                             $(".spin").css('display','none');
@@ -572,7 +568,7 @@ function save(name,cuestionario,cantidadErrores,isValid){
                 
                  });
                 localStorage.setItem('cuestionario',JSON.stringify(cuestionario));
-                console.log(cuestionario);
+                
             }else{
                 if(isValid){
                     alertError("Hay campos del formulario a corregir, por favor revisa y vuelve a intentarlo.");
@@ -587,13 +583,11 @@ $("#save").click(function(){
             let cantidadErrores=0;
             let soluciones = $(".solucion select");
             preguntas.forEach((e,i) => {
-                console.log("#solucion"+ (i+1));
-                console.log(soluciones[i]);
+
                 preguntas[i].solucion =$(soluciones[i]).val();
                 if(preguntas[i].respuestas.length<=1){
                     cantidadErrores++;
                 }
-                console.log($("#solucion1").val());
             });
             localStorage.setItem('preguntas',JSON.stringify(preguntas));
             let cuestionario ={preguntas:preguntas};
@@ -612,7 +606,7 @@ $("#save").click(function(){
             cuestionario.motivo=sceditor.instance(motivo).val();
             cuestionario.revision=sceditor.instance(revision).val();
 
-            console.log(cuestionario);
+            
             cuestionario.fecha = new Date();
             
             let titulo = $('#titulo').val();
@@ -725,7 +719,6 @@ $("#save").click(function(){
 
 
             $avatarInput = $("#avatar");
-            console.log($avatarInput[0].files);
              if( $avatarInput[0].files.length>1){
                 $("#avatar + span").text("Solo se permite subir una imagen");
                 $("#avatar").val("")

@@ -100,6 +100,9 @@
                                 <button type="submit" class="btn btn-primary" style="margin-left:5px;width:25px;height:29px;" onclick='copyLink("<?php echo $route;?>")'>
                                     <i class="fa fa-link"></i>
                                 </button>
+                                <button type="submit" class="btn bg-primary2 text-white" style="margin-left:5px;width:25px;height:29px;" onclick='copyIframe("<?php echo $route;?>")'>
+                                    <i class="fa fa-picture-o"></i>
+                                </button>
                                 
                                     <button type="submit" class="btn btn-danger text-white" style="margin-left:5px;width:25px;height:29px;" onclick="return validate(event,this,'{{$nivel->codigo}}')">
                                         <i class="fa fa-trash"></i>

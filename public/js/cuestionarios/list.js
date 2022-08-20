@@ -69,6 +69,34 @@ function copyLink(codigo){
         console.log('Something went wrong', err);
     });
 }
+function copyIframe(codigo){
+    navigator.clipboard.writeText("<iframe style='width:100%;height:100vh;' src='"+codigo+"'></iframe>")
+    .then(() => {
+        console.log("Text copied to clipboard...");
+        toastr["success"]("IFrame copiado")
+
+        toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+        }
+    })
+        .catch(err => {
+        console.log('Something went wrong', err);
+    });
+}
 let codigo = "";
 function changeStatus(code,disponibilidad,titulo){
     codigo=code;
@@ -125,7 +153,6 @@ function validate(e,form,id){
             url:'./cuestionarios/destroy',
             data:{codigo:id},
             success:function(data){
-                console.log(data,id);
               if(data=='true'){
                 let rsp=alertTimeCorrect("Caso de estudio eliminado exitosamente",function(response){
                     window.location=$("#route").val();

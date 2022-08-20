@@ -4,7 +4,6 @@ let preguntas=[];
 $( document ).ready(function() {
     let idSala =$("#idCuestionario").val();
     preguntas= JSON.parse($("#preguntas").val());
-    console.log(preguntas);
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -15,11 +14,8 @@ $( document ).ready(function() {
         url:$("#route").val()+'/../liveGraficos',
         data:{idSala:idSala},
         success:function(data){
-            console.log(data);
             let values =JSON.parse($("#values").val());
-            console.log(values);
             values.forEach((element,i) => {
-                console.log(element.respuestas);
                 let l = labels(element.respuestas);
                 let d = getData(element.puntajes_preguntas,element.respuestas);
                 let data_chart = {labels:l,data:d};
@@ -48,7 +44,7 @@ function labels( long){
 function getData(res,long){
     let data=[];
     let  p =[0,0,0,0];
-   console.log(res,"*********************************");
+  
    //p[indexP]=res[index].respuesta_count;
    for(let n=0;n<p.length;n++){
         let encontrado=0;
@@ -72,7 +68,7 @@ function getData(res,long){
         data.push(v);
         
     }
-    console.log(data);
+    
     return p;
 }
 function chart(graph,index,time){
@@ -84,7 +80,7 @@ function chart(graph,index,time){
         new_index =""+(index+1);
     }
     if($("#type").val()=="bar_h"){
-        console.log(graph.data);
+        
         let html="";
         let total=0;
     for(let j=0;j<graph.data.length;j++){
@@ -92,8 +88,8 @@ function chart(graph,index,time){
     }
     
         html+="<div class='col-sm-6 d-flex justify-content-center' style='margin-top:25px;'>"
-            html+="<div class='card'>";
-                html+='<div class="card-body">';
+            html+="<div class='card' id='card"+index+"'>";
+                html+='<div class="card-body" onclick=visor('+index+')>';
                     html+='<div class="row">';
                         html+='<div class="col-sm-12">';
                                 html+="<strong>Pregunta "+new_index+":"+preguntas[index].pregunta+"</strong>";
@@ -131,7 +127,7 @@ function chart(graph,index,time){
                                 html+=' </div>';
                             html+="</div>"
                         }
-                        console.log(graph.data.length);
+                        
                         if(preguntas[index].respuesta4!=""){
                             percentaje= (((graph.data[3])*100)/total).toFixed(2);
                             if(isNaN(percentaje)){
@@ -152,7 +148,7 @@ function chart(graph,index,time){
         $("#data_table").append(html);
         return;
     }
-    let html="<div class='col-sm-3 d-flex justify-content-center'><div class='row w-100 d-flex justify-content-center'><div class='col-sm-12 d-flex justify-content-center'><strong>Pregunta "+new_index+"</strong></div><div style='width:300px!important;height:300px!important;'><canvas id='myChart"+index+"' width='200' height='200' style='width:200px!important;height:200px!important;'></canvas></div></div></div>";
+    let html="<div class='col-sm-3 d-flex justify-content-center'><div class='row w-100 d-flex justify-content-center' ><div class='col-sm-12 d-flex justify-content-center' ><strong>Pregunta "+new_index+"</strong></div><div style='width:300px!important;height:300px!important;'><canvas  id='myChart"+index+"' width='200' height='200' style='width:200px!important;height:200px!important;'></canvas></div></div></div>";
     
     $("#data_table").append(html);
 
@@ -206,7 +202,7 @@ function chart(graph,index,time){
                   });
                  if(ttItem[0].parsed.y!=undefined){
                     let percentage = (ttItem[0].parsed.y * 100 / sum).toFixed(2) + '%';
-                    console.log(ttItem[0].parsed.y);
+                  
                     return ` ${percentage}`;
                  }
                   let percentage = (ttItem[0].parsed * 100 / sum).toFixed(2) + '%';
@@ -234,13 +230,97 @@ function chart(graph,index,time){
         plugins: [ChartDataLabels]
       });
 }
+let actual=0;
+let intervalModal=null;
+function visor(key){
+    actual=key;
+    $("#modal #modal-row").html($("#card"+key).html());
+    intervalModal =setInterval(() => {
+        $("#modal #modal-row").html($("#card"+key).html());
+    }, 1000);
+    $('#modal').modal('show');
+}
+function cloneCanvas(oldCanvas) {
+
+    //create a new canvas
+    var newCanvas = document.createElement('canvas');
+    var context = newCanvas.getContext('2d');
+
+    //set dimensions
+    newCanvas.width = oldCanvas.width;
+    newCanvas.height = oldCanvas.height;
+
+    //apply the old canvas to the new one
+    context.drawCanvas(oldCanvas, 0, 0);
+
+    //return the new canvas
+    return newCanvas;
+}
+function nextModal(){
+    clearInterval(intervalModal);
+    intervalModal=null;
+    if($("#card"+(actual+1)).length==1){
+        actual=actual+1;
+        $("#modal #modal-row").html($("#card"+(actual)).html());
+        intervalModal =setInterval(() => {
+            $("#modal #modal-row").html($("#card"+(actual)).html());
+        }, 1000);
+    }
+    
+}
+function beforeModal(){
+    clearInterval(intervalModal);
+    intervalModal=null;
+    if($("#card"+(actual-1)).length==1){
+        actual=actual-1;
+        $("#modal #modal-row").html($("#card"+(actual)).html());
+        intervalModal =setInterval(() => {
+            $("#modal #modal-row").html($("#card"+(actual)).html());
+        }, 1000);
+    }
+}
+function closeModal(){
+    clearInterval(intervalModal);
+    intervalModal=null;
+    $('#modal').modal('hide');
+}
+$('#modal').on('hidden.bs.modal', close);
+$('#modal').on('hidden.bs.modal', function () {
+   
+  });
+  $(() => {
+    var $dlg = $("#modal");
+    var $closeElement;
+
+    $dlg.on('show.bs.modal', (e) => {
+        // maybe do something to initialize the modal here...
+    })
+    .on('hide.bs.modal', (e) => {
+        $closeElement = $(document.activeElement);
+        clearInterval(intervalModal);
+        intervalModal=null;
+    })
+    .on('hidden.bs.modal', (e) => {
+        clearInterval(intervalModal);
+        intervalModal=null;
+        var id = $closeElement.attr('id');
+        // do something depending on the id...
+        if (id === 'btn-save') {
+            // save something
+        }
+        $closeElement = null;
+    });
+});
+function close(){
+
+}
 function stop(){
     clearInterval(intervalId);
-    console.log("TERMIAN");
+    
     intervalId =null;$("#button").removeClass("btn-danger");
     $("#button").addClass("btn-info");
     $("#button").html("<i class='fa fa-play'></i>");
-    console.log("TERMIAN");
+    
 }
 $("#button").click(function(){
     if($("#button").hasClass('btn-danger')){
@@ -269,10 +349,6 @@ function live(){
     });
     intervalId=setInterval(() => {
         if(estado==false){
-            console.log("Termino LIVE");
-          
-            
-
         }else{
             $.ajax({
                 type:'POST',
@@ -280,11 +356,8 @@ function live(){
                 data:{idSala:idSala},
                 success:function(data){
                     $("#data_table").html("");
-                    console.log(data);
                     let values =JSON.parse(data);
-                    console.log(values);
                     values.forEach((element,i) => {
-                        console.log(element.respuestas);
                         let l = labels(element.respuestas);
                         let d = getData(element.puntajes_preguntas,element.respuestas);
                         let data_chart = {labels:l,data:d};

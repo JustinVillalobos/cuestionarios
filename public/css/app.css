@@ -112,6 +112,9 @@ select,.select2,.select2 .selection, .select2-selection{
     
 
   }
+  .card{
+    cursor: pointer;
+  }
   .text-pregunta{
     font-size: 12px;
     color:black;
@@ -138,4 +141,7 @@ select,.select2,.select2 .selection, .select2-selection{
     line-height: 15px;
     background: transparent;
     border: none;
+  }
+  .bg-primary2{
+    background: #00315f!important;
   }

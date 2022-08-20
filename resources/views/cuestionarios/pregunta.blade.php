@@ -2,7 +2,7 @@
                                     <div class="row div-slide-{{$key}}" style="margin-top: 1%;width: 97%;">
                                         <div class="col-sm-12">
                                             <?php if($key<9){$zero="0";}else{$zero="";}?>
-                                            <h3 class="pregunta">Pregunta <span class="text-primary">{{$zero."".($key+1)}}</span></h3>
+                                            <h3 class="pregunta">Pregunta <span class="text-primary2">{{$zero."".($key+1)}}</span></h3>
                                             <h3 class="preguntaText">{{$p->pregunta}}</h3>
                                         </div>
                                         <div class="col-sm-12 d-flex justify-content-center" style="margin-top:25px;">
@@ -34,7 +34,7 @@
                                         </div>
                                         @endif
                                         <div class="col-sm-12 d-flex justify-content-center" style="margin-top:35px;">
-                                            <button id="demo{{$key}}" class="btn btn-primary btn-response btn-res btn-res{{$key}}" disabled onclick="responseQuestion({{$key}},{{$p->solucion}})">Comprobar</button>
+                                            <button id="demo{{$key}}" class="btn text-white btn-response btn-res btn-res{{$key}}  bg-primary2" disabled onclick="responseQuestion({{$key}},{{$p->solucion}})">Comprobar</button>
                                         </div>
                                         <div class="col-sm-12 details-div" >
                                             <div class="row" style="width: 95%;">
@@ -56,7 +56,7 @@
         
                                         </div>
                                         <div class="col-sm-12 d-flex justify-content-center" style="margin-top: 10px;">
-                                            <button class="btn btn-primary btn-hecho" style="width:200px!important;"onclick="showDetails({{$key}})">Ver Detalles</button>
+                                            <button class="btn text-white btn-hecho bg-primary2" style="width:200px!important;"onclick="showDetails({{$key}})">Ver Detalles</button>
                                         </div>
                                     </div>
                                     <div class="row div-det div-det-{{$key}}" style="margin-top: 12%;display:none;width: 97%;">

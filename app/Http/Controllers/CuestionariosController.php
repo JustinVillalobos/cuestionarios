@@ -596,6 +596,12 @@ class CuestionariosController extends Controller
         $preguntas =Pregunta::where('idCuestionario','=',$cuestionario->idCuestionario);
         $puntajes_preguntas =PuntajePreguntum::where('idCuestionario','=',$cuestionario->idCuestionario);
         try{
+            $imagen = public_path($cuestionario->imagen);
+            unlink($imagen);
+            if(!empty($cuestionario->imagenSeccion)){
+                $imagen = public_path($cuestionario->imagenSeccion);
+                unlink($imagen);
+            }
             $puntajes_preguntas->delete();
             $puntajes->delete();
             $preguntas->delete();

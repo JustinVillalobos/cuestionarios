@@ -42,6 +42,39 @@
    </div>
 </div>
 </div>
+<div class="modal fade" id="modal" >
+  <div class="modal-dialog modal-dialog-centered" style="width: 100%;max-width: 100%;height: 93vh;max-height: 93vh;">
+    <div class="modal-content" style="height: 55vh;background: #edecf0;">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title"></h4>
+        <button type="button" class="close" data-dismiss="modal" onclick="closeModal()" style="font-size: 24px;">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body" style="overflow-y: auto;overflow-x: hidden;    overflow-y: auto;width: 100%;justify-content: center;">
+        <div class="row" id='modal-row' style="height:300px">
+              
+                
+        </div>
+        <div class="row">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-6 d-flex justify-content-end">
+            <button class="btn btn-primary" onclick="beforeModal()" style="margin-right:5px;"><i class="fa fa-chevron-left"></i></button>
+                <button class="btn btn-primary" onclick="nextModal()"><i class="fa fa-chevron-right"></i></button>
+            </div>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        
+      </div>
+
+    </div>
+  </div>
+</div>
 <?php $route2 = route("cuestionarios.index");?>
 <input type="hidden" value="{{$route2}}" id="route" />
 <input type="hidden" value="{{ json_encode($puntajes_preguntas)}}" id="values" />
