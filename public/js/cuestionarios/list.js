@@ -174,4 +174,5 @@ function validate(e,form,id){
 }
 $( document ).ready(function() {
     $(".spin").css('display','none');
+    localStorage.setItem('indice',"");
 });

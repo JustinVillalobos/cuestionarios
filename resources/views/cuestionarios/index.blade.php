@@ -86,8 +86,15 @@
                                         <i class="fa fa-eye"></i>
                                     </button>
                                 </form>
-                                    <button type="submit" class="btn btn-warning text-white" style="margin-left:5px;width:25px;height:29px;" data-toggle="modal" data-target="#myModal" onclick="changeStatus('{{$nivel->codigo}}','{{$nivel->disponible}}','{{$nivel->titulo}}')">
+                                <form action='{{route("cuestionarios.edit", [$nivel])}}' method="post" >
+                                    @method("get")
+                                    @csrf
+                                    <button type="submit" class="btn btn-warning text-white" style="margin-left:5px;width:25px;height:29px;">
                                         <i class="fa fa-edit"></i>
+                                    </button>
+                                </form>
+                                    <button type="submit" class="btn btn-primary text-white" style="margin-left:5px;width:25px;height:29px;" data-toggle="modal" data-target="#myModal" onclick="changeStatus('{{$nivel->codigo}}','{{$nivel->disponible}}','{{$nivel->titulo}}')">
+                                        <i class="fa fa-file"></i>
                                     </button>
                                     <?php $route = route("cuestionarios.caso_estudio")."?code=".$nivel->codigo;?>
                                 <button type="submit" class="btn btn-info text-white" style="margin-left:5px;width:25px;height:29px;" onclick='copyQR("<?php echo $route;?>")'>

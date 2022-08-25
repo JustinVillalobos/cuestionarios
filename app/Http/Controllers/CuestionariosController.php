@@ -552,7 +552,14 @@ class CuestionariosController extends Controller
      */
     public function edit($id)
     {
-        //
+        var_dump($id);
+        $cuestionario=Cuestionario::where('idCuestionario','=',$id)->first();
+        $preguntas =Pregunta::where('idCuestionario','=',$id)->get();
+        $data = [
+            'cuestionario'=>$cuestionario,
+            'preguntas'=>$preguntas
+        ];
+        return view('cuestionarios.edit',$data);
     }
 
     /**
@@ -562,6 +569,114 @@ class CuestionariosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function updateCuestionario(Request $request){
+        $input = $request->all();
+        $datos= json_decode($input['cuestionario'],true);
+        if($datos['isNotUpdate']==true){
+            $imagen = $request->file('imagen');
+            if(empty($imagen)){
+                return "No hay";
+            }
+            $extension = $imagen->getClientOriginalExtension();
+            $randomName = $this->generarCadenaAleatoria(15);
+            $filename= "Img ".$randomName.".".$extension;
+            
+            $public_path = public_path('assets/avatars');
+            while(file_exists($public_path."/".$filename)){
+                $filename= "Img ".$randomName.".".$extension;
+            }
+            $path = 'assets/avatars/'.$filename;
+            $imagen->move($public_path,$filename);
+            $datos['imagen']=$path;
+        }else{
+            $datos['imagen']=$datos["imagenOld"];
+        }
+        
+        $code = $this->generarCadenaAleatoria(24);
+
+        $path = $datos['imagenSeccion'];
+        
+        $_SESSION['autor']=$_SESSION['id'];
+        $datos['hijos']="0";
+        $datos['fecha'] = date("y-m-d");
+        $cuestionario =Cuestionario::where('idCuestionario','=',$datos['id'])->first();
+        $cuestionario->titulo=$datos['titulo'];
+        $cuestionario->descripcion=$datos['descripcion'];
+        $cuestionario->antecedentesPersonales=$datos['antecedentesPersonales'];
+        $cuestionario->antecedentesFamiliares=$datos['antecedentesFamiliares'];
+        $cuestionario->motivoConsulta=$datos['motivo'];
+        $cuestionario->revision=$datos['revision'];
+        $cuestionario->edad=$datos['edad'];
+        $cuestionario->imagen=$datos['imagen'];
+        $cuestionario->trabajo=$datos['trabajo'];
+        $cuestionario->genero=$datos['genero'];
+        $cuestionario->hijos=$datos['hijos'];
+        $cuestionario->imagenSeccion=$datos['imagenSeccion'];
+        $cuestionario->seccion=$datos['seccion'];
+      //  $cuestionario = new Cuestionario([
+           /* 'codigo'=>$code,
+            'titulo'=>$datos['titulo'],
+            'descripcion'=>$datos['descripcion'],
+            'fechaCreacion'=>$datos['fecha'],
+            'disponible'=>1,
+            'autor'=>$_SESSION['autor'],
+            'antecedentesPersonales'=>$datos['antecedentesPersonales'],
+            'antecedentesFamiliares'=>$datos['antecedentesFamiliares'],
+            'motivoConsulta'=>$datos['motivo'],
+            'revision'=>$datos['revision'],
+            'edad'=>$datos['edad'],
+            'imagen'=>$datos['imagen'],
+            'genero'=>$datos['genero'],
+            'trabajo'=>$datos['trabajo'],
+            'hijos'=>$datos['hijos'],
+            'imagenSeccion'=>$path,
+            'seccion'=>$datos['seccion']*/
+        //]);
+        
+        try{
+            $cuestionario->save();
+            $puntajes =Puntaje::where('idCuestionario','=',$cuestionario->idCuestionario);
+            $preguntas =Pregunta::where('idCuestionario','=',$cuestionario->idCuestionario);
+            $puntajes_preguntas =PuntajePreguntum::where('idCuestionario','=',$cuestionario->idCuestionario);
+            $puntajes_preguntas->delete();
+            $puntajes->delete();
+            $preguntas->delete();
+          
+                $preguntas = $datos['preguntas'];
+                for($i=0;$i<count($preguntas);$i++){
+                    $pregunta = $preguntas[$i];
+                    if(count($pregunta['respuestas'])==3){
+                        $respuesta3 = $pregunta['respuestas'][2]['respuesta'];
+                        $respuesta4="";
+                    }else if(count($pregunta['respuestas'])==4){
+                        $respuesta3 = $pregunta['respuestas'][2]['respuesta'];
+                        $respuesta4=$pregunta['respuestas'][3]['respuesta'];
+                    }else{
+                        $respuesta3="";
+                        $respuesta4="";
+                    }
+                    $p = new Pregunta([
+                        'pregunta'=>$pregunta['pregunta'],
+                        'respuesta1'=>$pregunta['respuestas'][0]['respuesta'],
+                        'respuesta2'=>$pregunta['respuestas'][1]['respuesta'],
+                        'respuesta3'=>$respuesta3,
+                        'respuesta4'=>$respuesta4,
+                        'solucion'=>$pregunta['solucion'],
+                        'detalles'=>$pregunta['detalles'],
+                        'ayuda'=>$pregunta['ayuda'],
+                        'definiciones'=>$pregunta['definiciones'],
+                        'idCuestionario'=>$cuestionario->idCuestionario,
+                    ]);
+                    $p->save();
+                    
+                }
+                echo json_encode(true);
+
+            
+        }catch(\Illuminate\Database\QueryException $e){
+            echo json_encode($e);
+        }
+    }
     public function update(Request $request)
     {
         //
@@ -597,7 +712,7 @@ class CuestionariosController extends Controller
         $puntajes_preguntas =PuntajePreguntum::where('idCuestionario','=',$cuestionario->idCuestionario);
         try{
             $imagen = public_path($cuestionario->imagen);
-            unlink($imagen);
+            
             if(!empty($cuestionario->imagenSeccion)){
                 $imagen = public_path($cuestionario->imagenSeccion);
                 unlink($imagen);
@@ -606,7 +721,7 @@ class CuestionariosController extends Controller
             $puntajes->delete();
             $preguntas->delete();
             $cuestionario->delete();
-            
+            unlink($imagen);
             echo json_encode(true);
         }catch(\Illuminate\Database\QueryException $e){
             echo json_encode($e);
